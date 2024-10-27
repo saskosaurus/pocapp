@@ -21,6 +21,16 @@ const routes = [
     name: "postDetails",
     component: () => import("../views/PostDetailsScreen.vue"),
   },
+  {
+    path: "/newPost",
+    name: "newPost",
+    component: () => import("../views/NewPostScreen.vue"),
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: () => import("../views/ProfileScreen.vue"),
+  },
 ];
 
 const router = createRouter({

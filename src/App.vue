@@ -3,6 +3,13 @@
     <v-main>
       <v-app-bar>
         <v-app-bar-title>Instagram</v-app-bar-title>
+
+        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="home()">home</v-btn>
+        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="profile()">profile</v-btn>
+        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="newPost()">new post</v-btn>
+        <v-btn v-if="!store.isLoggedIn" style="color: #8e24aa" @click="login()">login</v-btn>
+        <v-btn v-if="!store.isLoggedIn" style="color: #8e24aa" @click="register()">register</v-btn>
+
         <v-card v-if="store.isLoggedIn" class="mx-auto" color="transparent" max-width="400" width="400" variant="flat">
           <v-card-text>
             <v-text-field
@@ -21,9 +28,7 @@
             </v-text-field>
           </v-card-text>
         </v-card>
-        <v-btn v-if="!store.isLoggedIn" style="color: blue" @click="login()">login</v-btn>
-        <v-btn v-if="!store.isLoggedIn" style="color: blue" @click="register()">register</v-btn>
-        <v-btn v-if="store.isLoggedIn" style="color: blue" @click="logout()">logout</v-btn>
+        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="logout()">logout</v-btn>
       </v-app-bar>
       <div id="routerView">
         <router-view />
@@ -55,15 +60,29 @@ export default {
     },
 
     login() {
-      console.log("login");
+      console.log("Navigate: login");
       this.$router.push({ path: "/login" });
     },
     logout() {
+      console.log("Navigate: logout");
       auth.logOutUser();
       this.$router.push({ path: "/login" });
     },
     register() {
+      console.log("Navigate: register");
       this.$router.push({ path: "/register" });
+    },
+    home() {
+      console.log("Navigate: home");
+      this.$router.push({ path: "/" });
+    },
+    newPost() {
+      console.log("Navigate: newPost");
+      this.$router.push({ path: "/newPost" });
+    },
+    profile() {
+      console.log("Navigate: profile");
+      this.$router.push({ path: "/profile" });
     },
     emptySearch() {
       store.searchInput = "";

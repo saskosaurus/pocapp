@@ -1,11 +1,11 @@
 import { reactive } from "vue";
 
 let store = reactive({
-  isLoggedIn: false,
+  isLoggedIn: null,
   searchInput: "",
 });
 
-let auth = {
+let auth = reactive({
   setUser(username, password) {
     localStorage.setItem(
       "userData",
@@ -13,6 +13,7 @@ let auth = {
         isLoggedIn: true,
         username: username,
         password: password,
+        avatarImgUrl: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
       })
     );
     return true;
@@ -42,6 +43,6 @@ let auth = {
     console.log("removeUserData");
     localStorage.removeItem("userData");
   },
-};
+});
 
 export { auth, store };

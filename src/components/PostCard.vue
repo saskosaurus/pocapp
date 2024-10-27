@@ -58,14 +58,17 @@ export default {
       alert("32142");
       document.activeElement.blur();
     },
-    getDetailsScreen(postId) {
-      console.log(postId);
-      return this.$router.push({ path: "/postDetails/" });
-    },
   },
 
-  computed: {
-    //vraca vrijeme kad je oglas postavljen
+  computed: {},
+
+  setup() {
+    return {
+      getDetailsScreen(postId) {
+        console.log(postId);
+        return this.$router.push({ path: "/postDetails/" });
+      },
+    };
   },
 };
 </script>

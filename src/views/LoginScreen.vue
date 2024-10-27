@@ -33,16 +33,18 @@ export default {
 
   data() {
     console.log(auth);
-    return { username: "", password: "" };
+    return { username: null, password: null };
   },
 
   methods: {
     login() {
       auth.logInUser(this.username, this.password);
       this.$router.push({ path: "/" });
+      return;
     },
     register() {
       this.$router.push({ path: "/register" });
+      return;
     },
   },
 };
