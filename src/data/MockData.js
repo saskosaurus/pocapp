@@ -1,4 +1,5 @@
-let posts = [
+import { reactive } from "vue";
+let posts = reactive([
   {
     id: "1",
     postedBy: "user name1",
@@ -35,7 +36,7 @@ let posts = [
     postedAt: getCurrendDateFormatted(),
     avatarImgUrl: "https://i.pravatar.cc/150?u=a04fdf1ff4e2902",
   },
-];
+]);
 
 function getCurrendDateFormatted() {
   return new Date().getDay() + "." + new Date().getMonth() + "." + new Date().getFullYear();

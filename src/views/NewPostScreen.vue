@@ -29,6 +29,8 @@ export default {
   data() {
     return { title: null, description: null, posts };
   },
+
+  unmounted() {},
   methods: {
     post() {
       console.log("creating post");
@@ -44,7 +46,12 @@ export default {
       };
       const newPosts = [newPost].concat(currentPosts);
       this.posts = newPosts;
-      this.$router.push({ path: "/" });
+
+      for (let i = 0; i < newPosts.length; i++) {
+        console.log("iz newPost: " + newPosts[i].id);
+      }
+
+      return this.$router.push({ path: "/" });
     },
   },
 };
