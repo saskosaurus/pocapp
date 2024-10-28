@@ -8,11 +8,17 @@
       </v-col>
       <v-col cols="8" style="border: 1px solid red">
         <v-sheet class="pa-2 ma-3">
-          <post-card v-for="post in fetchPosts" :key="post.id" :postDetails="post" />
+          <post-card
+            v-for="post in fetchPosts"
+            :key="post.id"
+            :postDetails="post"
+          />
         </v-sheet>
       </v-col>
       <v-col>
-        <v-sheet class="pa-2 ma-2"> {{ auth.getUser() }} {{ store.inputSearch }} </v-sheet>
+        <v-sheet class="pa-2 ma-2">
+          {{ auth.getUser() }} {{ store.inputSearch }}
+        </v-sheet>
       </v-col>
     </v-row>
   </v-container>
@@ -21,9 +27,7 @@
 <script>
 import PostCard from "@/components/PostCard.vue";
 import { auth, store } from "@/data/InternalStorage.js";
-import { posts } from "@/data/MockData.js";
 
-// Components
 export default {
   name: "HomeScreen",
   components: { PostCard },
@@ -32,27 +36,15 @@ export default {
     return { auth, store };
   },
 
-  setup() {
-    for (let i = 0; i < posts.length; i++) {
-      console.log("iz date: " + posts[i].id);
-    }
-    return { posts };
-  },
   computed: {
     fetchPosts() {
-      return this.posts;
+      return store.posts.sort((a, b) => {
+        return b.postedAt - a.postedAt;
+      });
     },
   },
 
-  methods: {
-    login() {
-      console.log("login");
-      //this.$router.push({ path: "/login" });
-    },
-    logout() {
-      console.log("logout");
-    },
-  },
+  methods: {},
 };
 </script>
 

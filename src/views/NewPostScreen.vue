@@ -7,51 +7,76 @@
       <v-col cols="8" style="border: 1px solid red">
         <v-sheet class="mx-auto" max-width="500">
           <v-form>
-            <v-text-field v-model="title" label="Title" type="text"></v-text-field>
-            <v-text-field v-model="description" label="Description" type="text"></v-text-field>
-            <v-file-input label="Image" prepend-icon="mdi-camera" variant="filled"></v-file-input>
+            <v-text-field
+              v-model="title"
+              label="Title"
+              type="text"
+            ></v-text-field>
+            <v-text-field
+              v-model="description"
+              label="Description"
+              type="text"
+            ></v-text-field>
+            <v-file-input
+              label="Image"
+              prepend-icon="mdi-camera"
+              variant="filled"
+            ></v-file-input>
             <v-row justify="center">
-              <v-btn class="mt-2" text="Post" color="grey-darken-2" @click="post()"> Post </v-btn>
+              <v-btn
+                class="mt-2"
+                text="Post"
+                color="grey-darken-2"
+                @click="this.post(computedTime)"
+              >
+                Post
+              </v-btn>
             </v-row>
           </v-form>
         </v-sheet>
       </v-col>
       <v-col>
-        <v-sheet class="pa-2 ma-2"> {{ posts }} </v-sheet>
+        <v-sheet class="pa-2 ma-2"> </v-sheet>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { posts } from "@/data/MockData";
+import { store, auth } from "@/data/InternalStorage.js";
 export default {
   data() {
-    return { title: null, description: null, posts };
+    return {
+      title: null,
+      description: null,
+      store,
+      auth,
+    };
   },
 
-  unmounted() {},
   methods: {
-    post() {
-      console.log("creating post");
-      const currentPosts = this.posts;
-      const newPost = {
+    async post(computedTime) {
+      console.log("Creating post");
+
+      let newPost = {
         id: Math.floor(Math.random() * 100),
-        postedBy: "user name1",
-        description: "description1",
-        imageUrl: "https://picsum.photos/550/550",
-        likes: 10,
-        postedAt: "3.4.2001",
-        avatarImgUrl: "https://i.pravatar.cc/150?u=a04fssd2581ff4e2902",
+        postedBy: auth.getUser().username,
+        description: this.description,
+        imageUrl: "https://picsum.photos/520/600",
+        likes: 0,
+        postedAt: computedTime,
+        avatarImgUrl: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
       };
-      const newPosts = [newPost].concat(currentPosts);
-      this.posts = newPosts;
 
-      for (let i = 0; i < newPosts.length; i++) {
-        console.log("iz newPost: " + newPosts[i].id);
-      }
-
+      store.posts.push(newPost);
       return this.$router.push({ path: "/" });
+    },
+  },
+
+  computed: {
+    // a computed getter
+    computedTime: function () {
+      return Date.now();
     },
   },
 };

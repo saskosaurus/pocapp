@@ -7,20 +7,44 @@
       <v-col cols="8" style="border: 1px solid red">
         <v-sheet class="mx-auto" max-width="300">
           <v-form>
-            <v-text-field v-model="username" label="Username" type="text"></v-text-field>
-            <v-text-field v-model="password" label="Password" type="password"></v-text-field>
+            <v-text-field
+              v-model="username"
+              label="Username"
+              type="text"
+            ></v-text-field>
+            <v-text-field
+              v-model="password"
+              label="Password"
+              type="password"
+            ></v-text-field>
             <v-row justify="center">
-              <v-btn class="mt-2" text="Login" color="grey-darken-2" @click="login()"> Login </v-btn>
+              <v-btn
+                class="mt-2"
+                text="Login"
+                color="grey-darken-2"
+                @click="login()"
+              >
+                Login
+              </v-btn>
             </v-row>
 
             <v-row justify="center">
-              <v-btn class="mt-2" text="Register" color="grey-darken-2" @click="register()"> Register </v-btn>
+              <v-btn
+                class="mt-2"
+                text="Register"
+                color="grey-darken-2"
+                @click="register()"
+              >
+                Register
+              </v-btn>
             </v-row>
           </v-form>
         </v-sheet>
       </v-col>
       <v-col>
-        <v-sheet class="pa-2 ma-2">col3 </v-sheet>
+        <v-sheet class="pa-2 ma-2">
+          {{ username }}
+        </v-sheet>
       </v-col>
     </v-row>
   </v-container>

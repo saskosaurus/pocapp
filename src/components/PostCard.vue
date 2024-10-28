@@ -1,23 +1,37 @@
 <template>
   <v-card class="mx-auto" max-width="600">
-    <div class="card" @click="this.getDetailsScreen(postDetails.id)">
-      <v-img class="align-end text-white" height="200" :src="`${postDetails.imageUrl}`" cover> </v-img>
+    <div class="card" @click="detailsScreen(postDetails.id)">
+      <v-img
+        class="align-end text-white"
+        height="200"
+        :src="`${postDetails.imageUrl}`"
+        cover
+      >
+      </v-img>
     </div>
     <div id="cardFooter">
       <v-card-actions>
         <v-list-item class="w-100">
           <template v-slot:prepend>
             <v-avatar color="grey-darken-3">
-              <v-img class="align-end text-white" :src="`${postDetails.avatarImgUrl}`" cover> </v-img>
+              <v-img
+                class="align-end text-white"
+                :src="`${postDetails.avatarImgUrl}`"
+                cover
+              >
+              </v-img>
             </v-avatar>
 
             <v-list-item-title>{{ postDetails.postedBy }}</v-list-item-title>
           </template>
 
           <template v-slot:append>
-            <div class="justify-self-end">
+            <div class="justify-self-end" @click="likePost(postDetails.id)">
               <v-icon class="me-1" icon="mdi-heart"></v-icon>
               <span class="subheading me-2">{{ postDetails.likes }}</span>
+            </div>
+            <div class="justify-self-end" @click="deletePost(postDetails.id)">
+              <v-icon class="me-1" icon="mdi-delete"></v-icon>
             </div>
           </template>
         </v-list-item>
@@ -33,7 +47,7 @@
         <template v-slot:append>
           <div class="justify-self-end">
             <v-card-subtitle class="pt-2">
-              {{ postDetails.postedAt }}
+              {{ formatTime(postDetails) }}
             </v-card-subtitle>
           </div>
         </template>
@@ -43,32 +57,45 @@
 </template>
 
 <script>
+import moment from "moment";
+import { auth, store } from "@/data/InternalStorage";
+
 export default {
   props: ["postDetails"],
   data(props) {
-    return { props };
-  },
-
-  mounted() {
-    return {};
+    return { props, auth };
   },
 
   methods: {
-    getAlert() {
-      alert("32142");
-      document.activeElement.blur();
+    formatTime(time) {
+      return moment(time.postedAt).startOf("hour").fromNow();
+    },
+    likePost(postId) {
+      console.log("Like post: " + postId);
+      for (let i = 0; i < store.posts.length; i++) {
+        if (postId === store.posts[i].id) {
+          store.posts[i].likes = store.posts[i].likes + 1;
+        }
+      }
+    },
+
+    deletePost(postId) {
+      console.log("Deleting post: " + postId);
+      store.posts = store.posts.filter((post) => {
+        return post.id !== postId;
+      });
+    },
+
+    detailsScreen(postId) {
+      console.log("Navigate details screen: " + postId);
+      this.$router.replace({ path: "/postDetails/" });
     },
   },
 
   computed: {},
 
-  setup() {
-    return {
-      getDetailsScreen(postId) {
-        console.log(postId);
-        return this.$router.push({ path: "/postDetails/" });
-      },
-    };
+  mounted() {
+    return {};
   },
 };
 </script>
