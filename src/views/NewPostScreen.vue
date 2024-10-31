@@ -27,7 +27,7 @@
                 class="mt-2"
                 text="Post"
                 color="grey-darken-2"
-                @click="this.post(computedTime)"
+                @click="this.post()"
               >
                 Post
               </v-btn>
@@ -55,7 +55,7 @@ export default {
   },
 
   methods: {
-    async post(computedTime) {
+    async post() {
       console.log("Creating post");
 
       let newPost = {
@@ -64,8 +64,9 @@ export default {
         description: this.description,
         imageUrl: "https://picsum.photos/520/600",
         likes: 0,
-        postedAt: computedTime,
-        avatarImgUrl: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+        postedAt: Date.now(),
+        avatarImgUrl: auth.getUser().avatarImgUrl,
+        comments: [],
       };
 
       store.posts.push(newPost);
@@ -73,12 +74,7 @@ export default {
     },
   },
 
-  computed: {
-    // a computed getter
-    computedTime: function () {
-      return Date.now();
-    },
-  },
+  computed: {},
 };
 </script>
 <style></style>

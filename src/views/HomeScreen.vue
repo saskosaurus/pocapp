@@ -16,9 +16,7 @@
         </v-sheet>
       </v-col>
       <v-col>
-        <v-sheet class="pa-2 ma-2">
-          {{ auth.getUser() }} {{ store.inputSearch }}
-        </v-sheet>
+        <v-sheet class="pa-2 ma-2"> </v-sheet>
       </v-col>
     </v-row>
   </v-container>
@@ -38,6 +36,11 @@ export default {
 
   computed: {
     fetchPosts() {
+      console.log(
+        store.posts.sort((a, b) => {
+          return b.postedAt - a.postedAt;
+        })
+      );
       return store.posts.sort((a, b) => {
         return b.postedAt - a.postedAt;
       });

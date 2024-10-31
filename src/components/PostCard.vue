@@ -30,7 +30,11 @@
               <v-icon class="me-1" icon="mdi-heart"></v-icon>
               <span class="subheading me-2">{{ postDetails.likes }}</span>
             </div>
-            <div class="justify-self-end" @click="deletePost(postDetails.id)">
+            <div
+              class="justify-self-end"
+              v-if="showDeletePost()"
+              @click="deletePost(postDetails.id)"
+            >
               <v-icon class="me-1" icon="mdi-delete"></v-icon>
             </div>
           </template>
@@ -62,14 +66,15 @@ import { auth, store } from "@/data/InternalStorage";
 
 export default {
   props: ["postDetails"],
-  data(props) {
-    return { props, auth };
+  data() {
+    return { auth };
   },
 
   methods: {
     formatTime(time) {
       return moment(time.postedAt).startOf("hour").fromNow();
     },
+
     likePost(postId) {
       console.log("Like post: " + postId);
       for (let i = 0; i < store.posts.length; i++) {
@@ -86,9 +91,14 @@ export default {
       });
     },
 
+    showDeletePost() {
+      return auth.getUser().username === this.postDetails.postedBy;
+    },
+
     detailsScreen(postId) {
       console.log("Navigate details screen: " + postId);
-      this.$router.replace({ path: "/postDetails/" });
+      store.selectedPost = postId;
+      this.$router.replace({ path: "/postDetails" });
     },
   },
 

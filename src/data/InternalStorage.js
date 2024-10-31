@@ -5,6 +5,7 @@ let store = reactive({
   isLoggedIn: null,
   searchInput: "",
   posts: posts,
+  selectedPost: null,
 });
 
 let auth = reactive({
