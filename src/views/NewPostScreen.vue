@@ -1,49 +1,26 @@
 <template>
   <v-container>
     <v-row no-gutters>
-      <v-col>
-        <v-sheet class="pa-2 ma-2"> col1</v-sheet>
-      </v-col>
+      <v-col> </v-col>
       <v-col cols="8" style="border: 1px solid red">
         <v-sheet class="mx-auto" max-width="500">
           <v-form>
-            <v-text-field
-              v-model="title"
-              label="Title"
-              type="text"
-            ></v-text-field>
-            <v-text-field
-              v-model="description"
-              label="Description"
-              type="text"
-            ></v-text-field>
-            <v-file-input
-              label="Image"
-              prepend-icon="mdi-camera"
-              variant="filled"
-            ></v-file-input>
+            <v-text-field v-model="title" label="Title" type="text"></v-text-field>
+            <v-text-field v-model="description" label="Description" type="text"></v-text-field>
             <v-row justify="center">
-              <v-btn
-                class="mt-2"
-                text="Post"
-                color="grey-darken-2"
-                @click="this.post()"
-              >
-                Post
-              </v-btn>
+              <v-btn class="mt-2" text="Post" color="grey-darken-2" @click="post()"> Post </v-btn>
             </v-row>
           </v-form>
         </v-sheet>
       </v-col>
-      <v-col>
-        <v-sheet class="pa-2 ma-2"> </v-sheet>
-      </v-col>
+      <v-col> </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
 import { store, auth } from "@/data/InternalStorage.js";
+
 export default {
   data() {
     return {

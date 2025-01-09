@@ -4,15 +4,12 @@
       <v-col>
         <v-sheet class="pa-2 ma-2">
           <p v-for="post in fetchPosts" :key="post.id">{{ post.id }}</p>
+          {{ store.searchInput }}
         </v-sheet>
       </v-col>
       <v-col cols="8" style="border: 1px solid red">
         <v-sheet class="pa-2 ma-3">
-          <post-card
-            v-for="post in fetchPosts"
-            :key="post.id"
-            :postDetails="post"
-          />
+          <post-card v-for="post in fetchPosts" :key="post.id" :postDetails="post" />
         </v-sheet>
       </v-col>
       <v-col>

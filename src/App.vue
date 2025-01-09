@@ -4,37 +4,16 @@
       <v-app-bar>
         <v-app-bar-title>Instagram</v-app-bar-title>
 
-        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="home()"
-          >home</v-btn
-        >
-        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="profile()"
-          >profile</v-btn
-        >
-        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="newPost()"
-          >new post</v-btn
-        >
-        <v-btn v-if="!store.isLoggedIn" style="color: #8e24aa" @click="login()"
-          >login</v-btn
-        >
-        <v-btn
-          v-if="!store.isLoggedIn"
-          style="color: #8e24aa"
-          @click="register()"
-          >register</v-btn
-        >
+        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="home()">home</v-btn>
+        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="newPost()">new post</v-btn>
+        <v-btn v-if="!store.isLoggedIn" style="color: #8e24aa" @click="login()">login</v-btn>
+        <v-btn v-if="!store.isLoggedIn" style="color: #8e24aa" @click="register()">register</v-btn>
 
-        <v-card
-          v-if="store.isLoggedIn"
-          class="mx-auto"
-          color="transparent"
-          max-width="400"
-          width="400"
-          variant="flat"
-        >
+        <v-card v-if="store.isLoggedIn" class="mx-auto" color="transparent" max-width="400" width="400" variant="flat">
           <v-card-text>
             <v-text-field
-              v-model="store.inputSearch"
-              @blur="store.inputSearch = ''"
+              v-model="store.searchInput"
+              @blur="store.searchInput = ''"
               append-inner-icon="mdi-magnify"
               density="compact"
               label="Search post"
@@ -43,23 +22,21 @@
               color="grey-darken-3"
               hide-details
               single-line
-              @click:append-inner="onClick"
             >
             </v-text-field>
           </v-card-text>
         </v-card>
-        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="logout()"
-          >logout</v-btn
-        >
+        <v-avatar size="30" v-if="store.isLoggedIn">
+          <v-img alt="John" :src="`${auth.getUser().avatarImgUrl}`"></v-img>
+        </v-avatar>
+        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="logout()">logout</v-btn>
       </v-app-bar>
       <div id="routerView">
         <router-view />
       </div>
       <v-footer>
         <v-row justify="center" no-gutters>
-          <v-col class="text-center mt-4" cols="12">
-            {{ new Date().getDay }} — saskosaurus
-          </v-col>
+          <v-col class="text-center mt-4" cols="12"> {{ new Date().getDay }} — saskosaurus </v-col>
         </v-row>
       </v-footer>
     </v-main>
@@ -104,10 +81,6 @@ export default {
       console.log("Navigate: newPost");
       this.$router.push({ path: "/newPost" });
     },
-    profile() {
-      console.log("Navigate: profile");
-      this.$router.push({ path: "/profile" });
-    },
     emptySearch() {
       store.searchInput = "";
     },
@@ -125,11 +98,7 @@ export default {
   color: white;
 }
 .v-main {
-  background-image: linear-gradient(
-    180deg,
-    rgb(255, 255, 255) 36%,
-    rgb(39, 39, 39) 100%
-  );
+  background-image: linear-gradient(180deg, rgb(255, 255, 255) 36%, rgb(39, 39, 39) 100%);
 }
 .v-toolbar__content {
   background-color: black;
