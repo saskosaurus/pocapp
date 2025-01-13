@@ -1,49 +1,16 @@
 <template>
-  <v-container>
-    <v-row no-gutters>
-      <v-col>
-        <v-sheet class="pa-2 ma-2"> col1</v-sheet>
-      </v-col>
-      <v-col cols="8" style="border: 1px solid red">
+  <v-container fluid class="fill-height">
+    <v-row justify="center" align="center" class="d-flex" style="min-height: 100vh; padding-top: 50vh; transform: translateY(-50%)">
+      <v-col cols="8" sm="6" md="4">
         <v-sheet class="mx-auto" max-width="300">
           <v-form>
-            <v-text-field
-              v-model="username"
-              label="Username"
-              type="text"
-            ></v-text-field>
-            <v-text-field
-              v-model="password"
-              label="Password"
-              type="password"
-            ></v-text-field>
+            <v-text-field v-model="username" label="Username" type="text"></v-text-field>
+            <v-text-field v-model="password" label="Password" type="password"></v-text-field>
             <v-row justify="center">
-              <v-btn
-                class="mt-2"
-                text="Login"
-                color="grey-darken-2"
-                @click="login()"
-              >
-                Login
-              </v-btn>
-            </v-row>
-
-            <v-row justify="center">
-              <v-btn
-                class="mt-2"
-                text="Register"
-                color="grey-darken-2"
-                @click="register()"
-              >
-                Register
-              </v-btn>
+              <v-btn class="mt-2" text="Login" color="grey-darken-3" @click="login()"> Login </v-btn>
+              <v-btn class="mt-2" text="Register" color="grey-darken-1" @click="register()" style="margin-left: 1em"> Register </v-btn>
             </v-row>
           </v-form>
-        </v-sheet>
-      </v-col>
-      <v-col>
-        <v-sheet class="pa-2 ma-2">
-          {{ username }}
         </v-sheet>
       </v-col>
     </v-row>
@@ -56,7 +23,6 @@ export default {
   name: "LoginScreen",
 
   data() {
-    console.log(auth);
     return { username: null, password: null };
   },
 

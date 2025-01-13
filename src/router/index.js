@@ -51,6 +51,7 @@ const router = createRouter({
 
 router.beforeEach((routeTo, routeFrom, next) => {
   if (!store.isLoggedIn && routeTo.meta.requireAuth) {
+    alert("Unauthorized");
     next("login");
   } else {
     next();

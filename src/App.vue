@@ -4,11 +4,6 @@
       <v-app-bar>
         <v-app-bar-title>Instagram</v-app-bar-title>
 
-        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="home()">home</v-btn>
-        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="newPost()">new post</v-btn>
-        <v-btn v-if="!store.isLoggedIn" style="color: #8e24aa" @click="login()">login</v-btn>
-        <v-btn v-if="!store.isLoggedIn" style="color: #8e24aa" @click="register()">register</v-btn>
-
         <v-card v-if="store.isLoggedIn" class="mx-auto" color="transparent" max-width="400" width="400" variant="flat">
           <v-card-text>
             <v-text-field
@@ -22,23 +17,24 @@
               color="grey-darken-3"
               hide-details
               single-line
+              class="search-field"
             >
             </v-text-field>
           </v-card-text>
         </v-card>
-        <v-avatar size="30" v-if="store.isLoggedIn">
+
+        <v-btn class="nav-btn" v-if="store.isLoggedIn" @click="home()">HOME</v-btn>
+        <v-btn class="nav-btn" v-if="store.isLoggedIn" @click="newPost()">NEW POST</v-btn>
+        <v-btn class="nav-btn" v-if="!store.isLoggedIn" @click="login()">LOGIN</v-btn>
+        <v-btn class="nav-btn" v-if="!store.isLoggedIn" @click="register()" style="margin-right: 15px">REGISTER</v-btn>
+        <v-btn class="nav-btn" v-if="store.isLoggedIn" @click="logout()">LOGOUT</v-btn>
+        <v-avatar size="30" v-if="store.isLoggedIn" style="margin-right: 15px">
           <v-img alt="John" :src="`${auth.getUser().avatarImgUrl}`"></v-img>
         </v-avatar>
-        <v-btn v-if="store.isLoggedIn" style="color: #8e24aa" @click="logout()">logout</v-btn>
       </v-app-bar>
       <div id="routerView">
         <router-view />
       </div>
-      <v-footer>
-        <v-row justify="center" no-gutters>
-          <v-col class="text-center mt-4" cols="12"> {{ new Date().getDay }} — saskosaurus </v-col>
-        </v-row>
-      </v-footer>
     </v-main>
   </v-app>
 </template>
@@ -97,6 +93,53 @@ export default {
 .v-btn__content {
   color: white;
 }
+
+.nav-btn {
+  font-family: "Roboto", sans-serif;
+  font-weight: 350;
+  font-size: 13px;
+  position: relative;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  margin-right: 5px;
+  padding: 0;
+}
+
+.nav-btn .v-btn__content {
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.nav-btn .v-btn__content::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0.5px;
+  width: 0;
+  background: linear-gradient(90deg, rgb(174, 0, 183), rgb(43, 163, 243));
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-btn:hover .v-btn__content::after {
+  width: 100%;
+}
+
+.search-field {
+  font-family: "Roboto", sans-serif;
+  font-weight: 350;
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  text-transform: none;
+}
+
+.search-field .v-input__control {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
 .v-main {
   background-image: linear-gradient(180deg, rgb(255, 255, 255) 36%, rgb(39, 39, 39) 100%);
 }
