@@ -4,7 +4,7 @@
       <v-img
         class="align-end text-white"
         height="200"
-        :src="`${postDetails.imageUrl}`"
+        :src="`${postDetails.localImageUrl ? postDetails.localImageUrl : postDetails.imageUrl}`"
         cover
       >
       </v-img>
