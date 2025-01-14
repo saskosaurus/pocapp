@@ -1,10 +1,9 @@
 <template>
   <v-app>
     <v-main>
-      <v-app-bar>
-        <v-app-bar-title>Instagram</v-app-bar-title>
-
-        <v-card v-if="store.isLoggedIn" class="mx-auto" color="transparent" max-width="400" width="400" variant="flat">
+      <v-app-bar v-if="store.isLoggedIn">
+        <v-app-bar-title>poc gram</v-app-bar-title>
+        <v-card class="mx-auto" color="transparent" max-width="400" width="400" variant="flat">
           <v-card-text>
             <v-text-field
               v-model="store.searchInput"
@@ -22,13 +21,10 @@
             </v-text-field>
           </v-card-text>
         </v-card>
-
-        <v-btn class="nav-btn" v-if="store.isLoggedIn" @click="home()">HOME</v-btn>
-        <v-btn class="nav-btn" v-if="store.isLoggedIn" @click="newPost()">NEW POST</v-btn>
-        <v-btn class="nav-btn" v-if="!store.isLoggedIn" @click="login()">LOGIN</v-btn>
-        <v-btn class="nav-btn" v-if="!store.isLoggedIn" @click="register()" style="margin-right: 15px">REGISTER</v-btn>
-        <v-btn class="nav-btn" v-if="store.isLoggedIn" @click="logout()">LOGOUT</v-btn>
-        <v-avatar size="30" v-if="store.isLoggedIn" style="margin-right: 15px">
+        <v-btn class="nav-btn" @click="home()">HOME</v-btn>
+        <v-btn class="nav-btn" @click="newPost()">NEW POST</v-btn>
+        <v-btn class="nav-btn" @click="logout()">LOGOUT</v-btn>
+        <v-avatar size="30" style="margin-right: 15px">
           <v-img alt="John" :src="`${auth.getUser().avatarImgUrl}`"></v-img>
         </v-avatar>
       </v-app-bar>
@@ -117,7 +113,7 @@ export default {
   left: 0;
   height: 0.5px;
   width: 0;
-  background: linear-gradient(90deg, rgb(174, 0, 183), rgb(43, 163, 243));
+  background: linear-gradient(90deg, #6228d7, #ee2a7b, #f9ce34);
   transition: width 0.3s ease-in-out;
 }
 
@@ -140,22 +136,24 @@ export default {
   letter-spacing: inherit;
 }
 
-.v-main {
-  background-image: linear-gradient(180deg, rgb(255, 255, 255) 36%, rgb(39, 39, 39) 100%);
+.v-text-field input {
+  font-size: 13px;
 }
+
+.v-input .v-label {
+  font-size: 13px;
+}
+
 .v-toolbar__content {
   background-color: black;
 }
-.v-footer {
-  color: white;
-  font-family: "roboto";
-  font-size: 12px;
-  background-color: transparent;
-}
+
 .v-app-bar-title {
-  color: white;
-  font-family: "instagram";
-  letter-spacing: 1.5pt;
-  font-size: 25;
+  font-family: "instagram", sans-serif;
+  letter-spacing: 1.5px;
+  font-size: 25px;
+  background: white;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 </style>

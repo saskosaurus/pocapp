@@ -44,6 +44,7 @@ export default {
       let newPost = {
         id: Math.floor(Math.random() * 100),
         postedBy: auth.getUser().username,
+        title: this.title,
         description: this.description,
         imageUrl: "https://picsum.photos/520/600",
         localImageUrl: imageBlob,

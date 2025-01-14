@@ -4,6 +4,7 @@ let posts = reactive([
   {
     id: 1,
     postedBy: "user name1",
+    title: "title1",
     description: "description1",
     imageUrl: "https://picsum.photos/550/550",
     likes: 10,
@@ -19,6 +20,7 @@ let posts = reactive([
   {
     id: 2,
     postedBy: "user name2",
+    title: "title2",
     description: "description2",
     imageUrl: "https://picsum.photos/550/600",
     likes: 10,
@@ -34,6 +36,7 @@ let posts = reactive([
   {
     id: 3,
     postedBy: "user name3",
+    title: "title3",
     description: "description3",
     imageUrl: "https://picsum.photos/600/600",
     likes: 10,
@@ -49,6 +52,7 @@ let posts = reactive([
   {
     id: 4,
     postedBy: "user name4",
+    title: "title4",
     description: "description4",
     imageUrl: "https://picsum.photos/600/500",
     likes: 10,
