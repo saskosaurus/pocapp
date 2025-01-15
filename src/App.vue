@@ -137,11 +137,11 @@ export default {
 }
 
 .v-text-field input {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .v-input .v-label {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .v-toolbar__content {

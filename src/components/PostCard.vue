@@ -3,9 +3,9 @@
     <!-- Avatar Section -->
     <div class="post-header">
       <v-avatar size="35" color="grey-darken-3">
-        <v-img class="align-end text-white" :src="`${postDetails.avatarImgUrl}`" cover />
+        <v-img class="align-end text-white" :src="`${postDetails.postedBy.avatarImgUrl}`" cover />
       </v-avatar>
-      <v-list-item-title class="post-username">{{ postDetails.postedBy }} • </v-list-item-title>
+      <v-list-item-title class="post-username">{{ postDetails.postedBy.username }} • </v-list-item-title>
       <v-list-item-title class="post-timestamp">{{ formatTime(postDetails) }}</v-list-item-title>
     </div>
 
@@ -24,16 +24,17 @@
           </div>
           <div class="comment-section" @click="detailsScreen(postDetails.id)">
             <v-icon class="me-1" icon="mdi-comment-outline"></v-icon>
+            <span v-if="postDetails.comments && postDetails.comments.length > 0" style="color: black">{{ postDetails.comments.length }}</span>
           </div>
         </template>
         <template v-slot:append>
-          <div v-if="showDeletePost()" class="delete-section" @click="deletePost(postDetails.id)">
-            <v-icon class="me-1" icon="mdi-delete-outline"></v-icon>
+          <div v-if="showDeletePost()" class="delete-section">
+            <DialogButton iconName="mdi-delete-outline" :nextAction="() => deletePost(postDetails.id)" dialogMessage="Delete post?" dialogTitle="Delete" buttonCancel="no" buttonConfirm="yes" />
           </div>
         </template>
       </v-list-item>
     </v-card-actions>
-    <v-list-item class="w-100">
+    <v-list-item class="w-100" v-if="postDetails.title && postDetails.description">
       <template v-slot:prepend>
         <v-card-text>
           <div class="title-section">{{ postDetails.title }}</div>
@@ -46,9 +47,11 @@
 <script>
 import moment from "moment";
 import { auth, store } from "@/data/InternalStorage";
+import DialogButton from "./DialogButton.vue";
 
 export default {
   props: ["postDetails"],
+  components: { DialogButton },
   data() {
     return {
       auth,
@@ -78,13 +81,13 @@ export default {
     },
 
     showDeletePost() {
-      return auth.getUser().username === this.postDetails.postedBy;
+      return auth.getUser().username === this.postDetails.postedBy.username;
     },
 
     detailsScreen(postId) {
       console.log("Navigate details screen: " + postId);
       store.selectedPost = postId;
-      this.$router.replace({ path: "/postDetails" });
+      this.$router.push({ path: "/postDetails" });
     },
   },
 };
@@ -102,7 +105,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 10px;
-  background-color: transparent;
+  background-color: #fafafa;
 }
 
 .post-username {
@@ -122,8 +125,8 @@ export default {
   width: 100%;
   height: 300px;
   background-color: transparent;
-  border-top: 0.01em solid rgb(215, 205, 205);
-  border-bottom: 0.01em solid rgb(215, 205, 205);
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 }
 
 .image-container {
@@ -135,8 +138,15 @@ export default {
 
 .v-card-actions {
   padding: 10px;
+  padding-bottom: 0px;
   display: flex;
   justify-content: flex-start;
+}
+
+.v-card-text {
+  padding: 0;
+  padding-left: 10px;
+  padding-bottom: 10px;
 }
 
 .like-section,

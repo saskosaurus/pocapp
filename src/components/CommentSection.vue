@@ -1,18 +1,11 @@
 <template>
-  <v-text-field
-    append-inner-icon="mdi-comment"
-    label="Komentiraj"
-    variant="underlined"
-    v-model="comment"
-    @keyup.enter="postComment()"
-  ></v-text-field>
-
-  <p v-show="fetchPostComment.length === 0">No comments</p>
-  <CommentItem
-    v-for="comment in fetchPostComment"
-    :key="comment"
-    :commentDetails="comment"
-  />
+  <div class="comment-input">
+    <v-text-field append-icon="mdi-send" label="Add a comment..." variant="underlined" v-model="comment" @keyup.enter="postComment" @click:append="postComment" dense hide-details></v-text-field>
+  </div>
+  <div class="comment-section">
+    <p v-if="fetchPostComment.length === 0" class="no-comments">No comments yet.</p>
+    <CommentItem v-for="comment in fetchPostComment" :key="comment.id" :commentDetails="comment" />
+  </div>
 </template>
 
 <script>
@@ -31,13 +24,17 @@ export default {
     postComment() {
       console.log("Posting comment");
 
+      if (this.comment === null) {
+        return;
+      }
+
       let selectedPost = store.posts.find((post) => {
         return post.id === store.selectedPost;
       });
-      console.log(selectedPost.comments);
-      selectedPost.comments.push({
+
+      selectedPost.comments.unshift({
         content: this.comment,
-        postedBy: auth.getUser().username,
+        postedBy: auth.getUser(),
       });
 
       this.comment = null;
@@ -58,4 +55,19 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.comment-input {
+  padding: 12px 16px 8px 16px;
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+}
+.comment-section {
+  background-color: #fafafa;
+  padding: 8px 16px;
+}
+.no-comments {
+  font-size: 0.9rem;
+  color: #888;
+  margin: 0;
+}
+</style>

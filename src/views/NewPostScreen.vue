@@ -2,17 +2,17 @@
   <v-container>
     <v-row no-gutters>
       <v-col> </v-col>
-      <v-col cols="8" style="border: 1px solid red">
-        <v-sheet class="mx-auto" max-width="500">
-          <v-form>
+      <v-col cols="8">
+        <v-sheet class="mx-auto" max-width="300">
+          <v-form class="input-form">
             <v-text-field v-model="title" label="Title" type="text"></v-text-field>
             <v-text-field v-model="description" label="Description" type="text"></v-text-field>
             <v-file-input v-model="file" label="Image" accept="image/*" @change="handleFileInput"></v-file-input>
-            <div v-if="imageUrl">
+            <v-row class="image-preview" v-if="imageUrl" justify="center">
               <img :src="imageUrl" alt="Preview" style="max-width: 300px" />
-            </div>
+            </v-row>
             <v-row justify="center">
-              <v-btn class="mt-2" text="Post" color="grey-darken-2" @click="post()"> Post </v-btn>
+              <DialogButton buttonTitle="post" buttonCancel="no" buttonConfirm="yes" dialog-title="New post" dialog-message="Publish new post?" :nextAction="() => post()" />
             </v-row>
           </v-form>
         </v-sheet>
@@ -24,8 +24,13 @@
 
 <script>
 import { store, auth } from "@/data/InternalStorage.js";
+import DialogButton from "@/components/DialogButton.vue";
 
 export default {
+  components: {
+    DialogButton,
+  },
+
   data() {
     return {
       title: null,
@@ -38,16 +43,20 @@ export default {
   },
 
   methods: {
-    async post() {
+    post() {
       console.log("Creating post");
-      const imageBlob = sessionStorage.getItem("imageBlob"); // Base64 URL from sessionStorage
+
+      if (this.imageUrl === null) {
+        alert("Image missing");
+        return;
+      }
+
       let newPost = {
         id: Math.floor(Math.random() * 100),
-        postedBy: auth.getUser().username,
+        postedBy: auth.getUser(),
         title: this.title,
         description: this.description,
-        imageUrl: "https://picsum.photos/520/600",
-        localImageUrl: imageBlob,
+        localImageUrl: this.imageUrl,
         likes: 0,
         postedAt: Date.now(),
         avatarImgUrl: auth.getUser().avatarImgUrl,
@@ -62,18 +71,22 @@ export default {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = (e) => {
-          const imageBlob = e.target.result; // Base64 or binary data
-          sessionStorage.removeItem("imageBlob"); // Empty in sessionStorage
-          sessionStorage.setItem("imageBlob", imageBlob); // Store in sessionStorage
-          this.imageUrl = URL.createObjectURL(file); // Create temporary URL for display
+        reader.onload = () => {
+          this.imageUrl = URL.createObjectURL(file);
         };
-        reader.readAsDataURL(file); // Read file as Base64 data URL
+        reader.readAsDataURL(file);
       }
     },
   },
-
-  computed: {},
 };
 </script>
-<style></style>
+<style scoped>
+.image-preview {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.input-form {
+  margin-top: 10px;
+}
+</style>
