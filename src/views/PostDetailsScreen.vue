@@ -1,13 +1,11 @@
 <template>
-  <v-container>
-    <v-row no-gutters>
-      <v-col> </v-col>
-      <v-col cols="8">
+<v-container fluid class="fill-height">
+    <v-row justify="center" align="center" class="d-flex">
+      <v-col cols="12" sm="12" md="12" lg="12">
         <v-sheet class="pa-2 ma-3">
           <PostCardDetails :postDetails="fetchSelectedPost" />
         </v-sheet>
       </v-col>
-      <v-col> </v-col>
     </v-row>
   </v-container>
 </template>

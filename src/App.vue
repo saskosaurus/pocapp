@@ -3,7 +3,7 @@
     <v-main>
       <v-app-bar v-if="store.isLoggedIn">
         <v-app-bar-title>poc gram</v-app-bar-title>
-        <v-card class="mx-auto" color="transparent" max-width="400" width="400" variant="flat">
+        <v-card class="mx-auto d-none d-md-block" color="transparent" max-width="400" width="400" variant="flat" v-if="this.$route.path === '/'">
           <v-card-text>
             <v-text-field
               v-model="store.searchInput"

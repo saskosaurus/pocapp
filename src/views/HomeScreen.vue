@@ -1,13 +1,11 @@
 <template>
-  <v-container>
-    <v-row no-gutters>
-      <v-col> </v-col>
-      <v-col cols="8">
+  <v-container fluid class="fill-height">
+    <v-row justify="center" align="center" class="d-flex">
+      <v-col cols="12" sm="12" md="12" lg="12">
         <v-sheet class="pa-2 ma-3">
           <post-card v-for="post in fetchPosts" :key="post.id" :postDetails="post" />
         </v-sheet>
       </v-col>
-      <v-col> </v-col>
     </v-row>
   </v-container>
 </template>
@@ -25,19 +23,19 @@ export default {
   },
 
   computed: {
-    fetchPosts() {
-      console.log(
-        store.posts.sort((a, b) => {
-          return b.postedAt - a.postedAt;
-        })
-      );
-      return store.posts.sort((a, b) => {
-        return b.postedAt - a.postedAt;
-      });
-    },
-  },
+  fetchPosts() {
+    console.log("fetching post")
+    const searchTerm = this.store.searchInput.toLowerCase();
 
-  methods: {},
+    return store.posts
+      .filter(post => {
+        const title = post.title?.toLowerCase() || '';
+        const content = post.description?.toLowerCase() || ''; 
+        return title.includes(searchTerm) || content.includes(searchTerm);
+      })
+      .sort((a, b) => b.postedAt - a.postedAt);
+  },
+}
 };
 </script>
 
