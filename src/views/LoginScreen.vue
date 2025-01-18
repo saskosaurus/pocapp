@@ -33,11 +33,13 @@ export default {
 
   methods: {
     login() {
+      console.log("METHOD: login");
       auth.logInUser(this.username, this.password);
       this.$router.push({ path: "/" });
       return;
     },
     register() {
+      console.log("METHOD: register");
       this.$router.push({ path: "/register" });
       return;
     },

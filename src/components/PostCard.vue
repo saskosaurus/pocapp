@@ -59,12 +59,14 @@ export default {
   },
 
   methods: {
-    formatTime(time) {
-      return moment(time.postedAt).format("MMM Do YYYY");
+    detailsScreen(postId) {
+      console.log("METHOD: detailsScreen");
+      store.selectedPost = postId;
+      this.$router.push({ path: "/postDetails" });
     },
 
     likePost(postId) {
-      console.log("Like post: " + postId);
+      console.log("METHOD: likePost");
       for (let i = 0; i < store.posts.length; i++) {
         if (postId === store.posts[i].id) {
           const post = store.posts[i];
@@ -76,18 +78,16 @@ export default {
     },
 
     deletePost(postId) {
-      console.log("Deleting post: " + postId);
+      console.log("METHOD: deletePost");
       store.posts = store.posts.filter((post) => post.id !== postId);
+    },
+
+    formatTime(time) {
+      return moment(time.postedAt).format("MMM Do YYYY");
     },
 
     showDeletePost() {
       return auth.getUser().username === this.postDetails.postedBy.username;
-    },
-
-    detailsScreen(postId) {
-      console.log("Navigate details screen: " + postId);
-      store.selectedPost = postId;
-      this.$router.push({ path: "/postDetails" });
     },
   },
 };

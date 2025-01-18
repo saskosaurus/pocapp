@@ -31,6 +31,7 @@ export default {
 
   methods: {
     register() {
+      console.log("METHOD: register");
       auth.logInUser(this.username, this.password);
       this.$router.push({ path: "/" });
     },

@@ -54,12 +54,9 @@ export default {
   },
 
   methods: {
-    formatTime(time) {
-      return moment(time.postedAt).format("MMM Do YYYY");
-    },
-
     likePost(postId) {
-      console.log("Like post: " + postId);
+      console.log("METHOD: likePost");
+
       for (let i = 0; i < store.posts.length; i++) {
         if (postId === store.posts[i].id) {
           const post = store.posts[i];
@@ -70,24 +67,22 @@ export default {
       }
     },
 
-    showDeletePost() {
-      return auth.getUser().username === this.postDetails.postedBy;
-    },
-
     deletePost(postId) {
-      console.log("Deleting post: " + postId);
+      console.log("METHOD: deletePost");
 
       store.posts = store.posts.filter((post) => {
         return post.id !== postId;
       });
       this.$router.push({ path: "/" });
     },
-  },
 
-  computed: {},
+    showDeletePost() {
+      return auth.getUser().username === this.postDetails.postedBy;
+    },
 
-  mounted() {
-    return {};
+    formatTime(time) {
+      return moment(time.postedAt).format("MMM Do YYYY");
+    },
   },
 };
 </script>

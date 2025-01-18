@@ -22,7 +22,7 @@ export default {
 
   methods: {
     postComment() {
-      console.log("Posting comment");
+      console.log("METHOD: postComment");
 
       if (this.comment === null) {
         return;
@@ -44,11 +44,11 @@ export default {
 
   computed: {
     fetchPostComment() {
-      console.log("Fetching selected post comments");
+      console.log("METHOD: fetchPostComment");
+
       let selectedPost = store.posts.find((post) => {
         return post.id === store.selectedPost;
       });
-      console.log(selectedPost.comments);
       return selectedPost.comments;
     },
   },

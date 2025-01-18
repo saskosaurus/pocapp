@@ -1,5 +1,5 @@
 <template>
-<v-container fluid class="fill-height">
+  <v-container fluid class="fill-height">
     <v-row justify="center" align="center" class="d-flex">
       <v-col cols="12" sm="12" md="12" lg="12">
         <v-sheet class="pa-2 ma-3">
@@ -24,7 +24,7 @@ export default {
 
   computed: {
     fetchSelectedPost() {
-      console.log("Fetching selected post by ID: " + store.selectedPost);
+      console.log("METHOD: fetchSelectedPost");
       let selectedPost = store.posts.find((post) => {
         return post.id === store.selectedPost;
       });

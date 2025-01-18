@@ -53,24 +53,24 @@ export default {
     },
 
     login() {
-      console.log("Navigate: login");
+      console.log("NAVIGATE: login");
       this.$router.push({ path: "/login" });
     },
     logout() {
-      console.log("Navigate: logout");
+      console.log("NAVIGATE: logout");
       auth.logOutUser();
       this.$router.push({ path: "/login" });
     },
     register() {
-      console.log("Navigate: register");
+      console.log("NAVIGATE: register");
       this.$router.push({ path: "/register" });
     },
     home() {
-      console.log("Navigate: home");
+      console.log("NAVIGATE: home");
       this.$router.push({ path: "/" });
     },
     newPost() {
-      console.log("Navigate: newPost");
+      console.log("NAVIGATE: newPost");
       this.$router.push({ path: "/newPost" });
     },
     emptySearch() {

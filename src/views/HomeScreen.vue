@@ -23,19 +23,19 @@ export default {
   },
 
   computed: {
-  fetchPosts() {
-    console.log("fetching post")
-    const searchTerm = this.store.searchInput.toLowerCase();
+    fetchPosts() {
+      console.log("METHOD: fetchPosts");
+      const searchTerm = this.store.searchInput.toLowerCase();
 
-    return store.posts
-      .filter(post => {
-        const title = post.title?.toLowerCase() || '';
-        const content = post.description?.toLowerCase() || ''; 
-        return title.includes(searchTerm) || content.includes(searchTerm);
-      })
-      .sort((a, b) => b.postedAt - a.postedAt);
+      return store.posts
+        .filter((post) => {
+          const title = post.title?.toLowerCase() || "";
+          const content = post.description?.toLowerCase() || "";
+          return title.includes(searchTerm) || content.includes(searchTerm);
+        })
+        .sort((a, b) => b.postedAt - a.postedAt);
+    },
   },
-}
 };
 </script>
 

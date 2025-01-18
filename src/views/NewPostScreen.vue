@@ -44,7 +44,7 @@ export default {
 
   methods: {
     post() {
-      console.log("Creating post");
+      console.log("METHOD: post");
 
       if (this.imageUrl === null) {
         alert("Image missing");
@@ -68,6 +68,7 @@ export default {
     },
 
     handleFileInput(event) {
+      console.log("METHOD: handleFileInput");
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
