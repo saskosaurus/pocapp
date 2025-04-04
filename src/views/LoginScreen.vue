@@ -24,6 +24,8 @@
 
 <script>
 import { auth } from "@/data/InternalStorage";
+import Services from "@/services/Services.js";
+
 export default {
   name: "LoginScreen",
 
@@ -32,8 +34,9 @@ export default {
   },
 
   methods: {
-    login() {
+    async login() {
       console.log("METHOD: login");
+      await Services.signIn(this.username, this.password);
       auth.logInUser(this.username, this.password);
       this.$router.push({ path: "/" });
       return;
