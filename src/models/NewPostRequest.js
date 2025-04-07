@@ -1,8 +1,8 @@
-import { v4 as uuidv4 } from "uuid";
+import ShortUniqueId from "short-uuid";
 
 export class NewPostRequest {
   constructor(postedBy, title, description, image) {
-    this.id = uuidv4();
+    this.id = ShortUniqueId().new();
     this.postedBy = postedBy;
     this.title = title;
     this.description = description;
