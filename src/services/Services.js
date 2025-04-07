@@ -31,6 +31,10 @@ let services = {
       return false;
     }
   },
+
+  async uploadImageToCloudinary(file) {
+    return await Post.uploadImageToCloudinary(file);
+  },
 };
 
 export default services;

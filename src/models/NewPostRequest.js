@@ -1,12 +1,12 @@
 import ShortUniqueId from "short-uuid";
 
 export class NewPostRequest {
-  constructor(postedBy, title, description, image) {
+  constructor(postedBy, title, description, imageUrl) {
     this.id = ShortUniqueId().new();
     this.postedBy = postedBy;
     this.title = title;
     this.description = description;
-    this.image = image;
+    this.imageUrl = imageUrl;
     this.postedAt = Date.now();
     this.likes = 0;
     this.comments = [];
@@ -18,7 +18,7 @@ export class NewPostRequest {
       postedBy: this.postedBy,
       title: this.title,
       description: this.description,
-      image: this.image,
+      imageUrl: this.imageUrl,
       postedAt: this.postedAt,
       likes: this.likes,
       comments: this.comments,

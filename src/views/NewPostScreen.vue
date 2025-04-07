@@ -8,8 +8,8 @@
             <v-text-field v-model="title" label="Title" type="text"></v-text-field>
             <v-text-field v-model="description" label="Description" type="text"></v-text-field>
             <v-file-input v-model="file" label="Image" accept="image/*" @change="handleFileInput"></v-file-input>
-            <v-row class="image-preview" v-if="imageUrl" justify="center">
-              <img :src="imageUrl" alt="Preview" style="max-width: 300px" />
+            <v-row class="image-preview" v-if="previewUrl" justify="center">
+              <img :src="previewUrl" alt="Preview" style="max-width: 300px" />
             </v-row>
             <v-row justify="center">
               <DialogButton buttonTitle="post" buttonCancel="no" buttonConfirm="yes" dialog-title="New post" dialog-message="Publish new post?" :nextAction="() => post()" />
@@ -38,6 +38,7 @@ export default {
       title: null,
       description: null,
       imageUrl: null,
+      previewUrl: null,
       file: null,
       store,
       auth,
@@ -46,39 +47,23 @@ export default {
 
   methods: {
     async post() {
-      console.log("METHOD: post");
+      console.log("ENTERED METHOD: post");
 
-      if (this.imageUrl === null) {
-        alert("Image missing");
-        return;
-      }
+      this.imageUrl = await Services.uploadImageToCloudinary(this.file);
+      const newPostRequest = new NewPostRequest(auth.getUser(), this.title, this.description, this.imageUrl);
+      await Services.newPost(newPostRequest);
 
-      let response = await Services.newPost(new NewPostRequest(auth.getUser(), this.title, this.description, this.imageUrl));
-      console.log(response);
-
-      let newPost = {
-        id: Math.floor(Math.random() * 100),
-        postedBy: auth.getUser(),
-        title: this.title,
-        description: this.description,
-        localImageUrl: this.imageUrl,
-        likes: 0,
-        postedAt: Date.now(),
-        avatarImgUrl: auth.getUser().avatarImgUrl,
-        comments: [],
-      };
-
-      store.posts.push(newPost);
+      store.posts.push(newPostRequest);
       return this.$router.push({ path: "/" });
     },
 
     handleFileInput(event) {
-      console.log("METHOD: handleFileInput");
+      console.log("ENTERED METHOD: handleFileInput");
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
-          this.imageUrl = URL.createObjectURL(file);
+          this.previewUrl = URL.createObjectURL(file);
         };
         reader.readAsDataURL(file);
       }

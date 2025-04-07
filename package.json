@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
+    "axios": "^1.8.4",
     "core-js": "^3.8.3",
     "firebase": "^11.6.0",
     "moment": "^2.30.1",
