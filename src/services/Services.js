@@ -35,6 +35,10 @@ let services = {
   async uploadImageToCloudinary(file) {
     return await Post.uploadImageToCloudinary(file);
   },
+
+  async fetchPosts() {
+    return await Post.fetchPosts();
+  },
 };
 
 export default services;

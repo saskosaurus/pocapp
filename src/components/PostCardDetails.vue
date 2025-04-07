@@ -3,9 +3,9 @@
     <!-- Avatar Section -->
     <div class="post-header">
       <v-avatar size="35" color="grey-darken-3">
-        <v-img class="align-end text-white" :src="`${postDetails.postedBy.avatarImgUrl}`" cover />
+        <v-img class="align-end text-white" :src="`${postDetails.postedBy.profileImage}`" cover />
       </v-avatar>
-      <v-list-item-title class="post-username">{{ postDetails.postedBy.username }} • </v-list-item-title>
+      <v-list-item-title class="post-username">{{ postDetails.postedBy.nickname }} • </v-list-item-title>
       <v-list-item-title class="post-timestamp">{{ formatTime(postDetails) }}</v-list-item-title>
     </div>
 

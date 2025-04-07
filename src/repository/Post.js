@@ -1,6 +1,7 @@
 import { db } from "@/database/Firebase.js";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, collection, setDoc, getDocs } from "firebase/firestore";
 import { dbConstants } from "@/constants/Constants.js";
+import { PostData } from "@/models/PostData.js";
 import axios from "axios";
 
 let Post = {
@@ -39,6 +40,25 @@ let Post = {
       return response.data.secure_url;
     } catch (error) {
       console.error("Cloudinary upload failed", error);
+      return null;
+    }
+  },
+
+  async fetchPosts() {
+    console.log("ENTERED METHOD: fetchPosts");
+    try {
+      const querySnapshot = await getDocs(collection(db, dbConstants.POSTS));
+      const fetchedPosts = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data().postData;
+        const post = new PostData(doc.id, data.postedBy || null, data.title || null, data.description || null, data.imageUrl || null, data.postedAt || null, data.likes || null, data.comments || []);
+        fetchedPosts.push(post);
+      });
+
+      console.log("Posts fetched:", fetchedPosts);
+      return fetchedPosts;
+    } catch (error) {
+      console.error("Error fetching posts:", error);
       return null;
     }
   },
