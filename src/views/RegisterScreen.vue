@@ -8,7 +8,8 @@
           </div>
           <div class="main-title">poc gram</div>
           <v-form>
-            <v-text-field v-model="username" label="Username" type="text"></v-text-field>
+            <v-text-field v-model="nickname" label="Nickname" type="text"></v-text-field>
+            <v-text-field v-model="email" label="Email" type="text"></v-text-field>
             <v-text-field v-model="password" label="Password" type="password"></v-text-field>
             <v-row justify="center">
               <v-btn class="mt-2" text="Register" color="grey-darken-3" @click.prevent="register()"> Register </v-btn>
@@ -21,19 +22,26 @@
 </template>
 
 <script>
-import { auth } from "@/data/InternalStorage";
+import Services from "@/services/Services.js";
+import { SignUpRequest } from "@/models/SignUpRequest";
 export default {
   name: "LoginScreen",
 
   data() {
-    return { username: "", password: "" };
+    return { nickname: "", email: "", password: "" };
   },
 
   methods: {
-    register() {
+    async register() {
       console.log("METHOD: register");
-      auth.logInUser(this.username, this.password);
-      this.$router.push({ path: "/" });
+
+      let response = await Services.signUp(new SignUpRequest(this.email, this.password, this.nickname));
+      if (response) {
+        this.$router.push({ path: "/" });
+        return;
+      } else {
+        alert("Register failed!");
+      }
     },
   },
 };

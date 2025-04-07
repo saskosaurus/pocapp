@@ -25,6 +25,8 @@
 <script>
 import { store, auth } from "@/data/InternalStorage.js";
 import DialogButton from "@/components/DialogButton.vue";
+import { NewPostRequest } from "@/models/NewPostRequest.js";
+import Services from "@/services/Services.js";
 
 export default {
   components: {
@@ -43,13 +45,16 @@ export default {
   },
 
   methods: {
-    post() {
+    async post() {
       console.log("METHOD: post");
 
       if (this.imageUrl === null) {
         alert("Image missing");
         return;
       }
+
+      let response = await Services.newPost(new NewPostRequest(auth.getUser(), this.title, this.description, this.imageUrl));
+      console.log(response);
 
       let newPost = {
         id: Math.floor(Math.random() * 100),

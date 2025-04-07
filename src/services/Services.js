@@ -1,15 +1,36 @@
 import Authentication from "@/repository/Authentication.js";
+import Post from "@/repository/Post.js";
+import { auth } from "@/data/InternalStorage";
 
 let services = {
-
-    async signUp(email, password){
-        return await Authentication.signUp(email, password);
-    },
-
-    async signIn(email, password){
-        return await Authentication.signIn(email, password);
+  async signUp(signUpRequest) {
+    const response = await Authentication.signUp(signUpRequest);
+    if (response) {
+      auth.setUser(response);
+      return true;
+    } else {
+      return false;
     }
+  },
 
-}
+  async signIn(signInRequest) {
+    const response = await Authentication.signIn(signInRequest);
+    if (response) {
+      auth.setUser(response);
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  async newPost(newPostRequest) {
+    const response = await Post.newPost(newPostRequest.toJSON());
+    if (response) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+};
 
 export default services;

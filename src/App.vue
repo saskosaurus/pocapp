@@ -25,7 +25,7 @@
         <v-btn class="nav-btn" @click="newPost()">NEW POST</v-btn>
         <v-btn class="nav-btn" @click="logout()">LOGOUT</v-btn>
         <v-avatar size="30" style="margin-right: 15px">
-          <v-img alt="John" :src="`${auth.getUser().avatarImgUrl}`"></v-img>
+          <v-img alt="John" :src="`${auth.getUser().profileImage}`"></v-img>
         </v-avatar>
       </v-app-bar>
       <div id="routerView">

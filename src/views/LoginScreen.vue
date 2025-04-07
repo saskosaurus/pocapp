@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import { auth } from "@/data/InternalStorage";
 import Services from "@/services/Services.js";
+import { SignInRequest } from "@/models/SignInRequest.js";
 
 export default {
   name: "LoginScreen",
@@ -36,10 +36,15 @@ export default {
   methods: {
     async login() {
       console.log("METHOD: login");
-      await Services.signIn(this.username, this.password);
-      auth.logInUser(this.username, this.password);
-      this.$router.push({ path: "/" });
-      return;
+
+      let response = await Services.signIn(new SignInRequest(this.username, this.password));
+
+      if (response) {
+        this.$router.push({ path: "/" });
+        return;
+      } else {
+        alert("Login failed!");
+      }
     },
     register() {
       console.log("METHOD: register");

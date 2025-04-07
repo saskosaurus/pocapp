@@ -9,15 +9,9 @@ let store = reactive({
 });
 
 let auth = reactive({
-  setUser(username, password) {
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({
-        username: username,
-        password: password,
-        avatarImgUrl: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-      })
-    );
+  setUser(userData) {
+    store.isLoggedIn = true;
+    localStorage.setItem("userData", JSON.stringify(userData));
     return true;
   },
 
@@ -27,13 +21,6 @@ let auth = reactive({
 
   isAuthenticated() {
     return store.isLoggedIn;
-  },
-
-  logInUser(username, password) {
-    console.log("Logging in user;");
-    this.setUser(username, password);
-    store.isLoggedIn = true;
-    return;
   },
 
   logOutUser() {
