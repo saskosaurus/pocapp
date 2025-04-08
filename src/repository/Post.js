@@ -1,5 +1,5 @@
 import { db } from "@/database/Firebase.js";
-import { doc, collection, setDoc, getDocs } from "firebase/firestore";
+import { doc, collection, setDoc, getDocs, updateDoc, increment, query, where } from "firebase/firestore";
 import { dbConstants } from "@/constants/Constants.js";
 import { PostData } from "@/models/PostData.js";
 import axios from "axios";
@@ -51,7 +51,7 @@ let Post = {
       const fetchedPosts = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data().postData;
-        const post = new PostData(doc.id, data.postedBy || null, data.title || null, data.description || null, data.imageUrl || null, data.postedAt || null, data.likes || null, data.comments || []);
+        const post = new PostData(doc.id, data.postedBy || null, data.title || null, data.description || null, data.imageUrl || null, data.postedAt || null, data.likes || null, data.commentsCount || null);
         fetchedPosts.push(post);
       });
 
@@ -59,6 +59,42 @@ let Post = {
       return fetchedPosts;
     } catch (error) {
       console.error("Error fetching posts:", error);
+      return null;
+    }
+  },
+
+  async postComment(comment) {
+    console.log("ENTERED METHOD: postComment");
+    try {
+      await setDoc(doc(db, dbConstants.COMMENTS, comment.id), {
+        commentData: comment,
+      });
+
+      const postRef = doc(db, dbConstants.POSTS, comment.postId);
+      await updateDoc(postRef, {
+        "postData.commentsCount": increment(1),
+      });
+
+      return true;
+    } catch (error) {
+      console.error("Error: ", error);
+      return null;
+    }
+  },
+
+  async fetchComments(postId) {
+    console.log("ENTERED METHOD: fetchComments");
+    const commentsRef = collection(db, dbConstants.COMMENTS);
+    const q = query(commentsRef, where("commentData.postId", "==", postId));
+    try {
+      const querySnapshot = await getDocs(q);
+      const comments = [];
+      querySnapshot.forEach((doc) => {
+        comments.push(doc.data());
+      });
+      return comments;
+    } catch (error) {
+      console.error("Error fetching comments: ", error);
       return null;
     }
   },

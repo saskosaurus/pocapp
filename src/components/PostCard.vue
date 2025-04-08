@@ -24,7 +24,7 @@
           </div>
           <div class="comment-section" @click="detailsScreen(postDetails.id)">
             <v-icon class="me-1" icon="mdi-comment-outline"></v-icon>
-            <span v-if="postDetails.comments && postDetails.comments.length > 0" style="color: black">{{ postDetails.comments.length }}</span>
+            <span v-if="postDetails.commentsCount > 0" style="color: black">{{ postDetails.commentsCount }}</span>
           </div>
         </template>
         <template v-slot:append>
@@ -87,7 +87,7 @@ export default {
     },
 
     showDeletePost() {
-      return auth.getUser().username === this.postDetails.postedBy.username;
+      return auth.getUser().id === this.postDetails.postedBy.id;
     },
   },
 };

@@ -24,10 +24,11 @@ let services = {
   },
 
   async newPost(newPostRequest) {
-    const response = await Post.newPost(newPostRequest.toJSON());
-    if (response) {
+    try {
+      await Post.newPost(newPostRequest.toJSON());
       return true;
-    } else {
+    } catch (error) {
+      console.error("Error making new post: ", error);
       return false;
     }
   },
@@ -38,6 +39,20 @@ let services = {
 
   async fetchPosts() {
     return await Post.fetchPosts();
+  },
+
+  async postComment(comment) {
+    try {
+      await Post.postComment(comment.toJSON());
+      return true;
+    } catch (error) {
+      console.error("Error posting comment: ", error);
+      return false;
+    }
+  },
+
+  async fetchComments(postId) {
+    return await Post.fetchComments(postId);
   },
 };
 

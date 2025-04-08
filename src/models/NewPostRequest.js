@@ -9,7 +9,7 @@ export class NewPostRequest {
     this.imageUrl = imageUrl;
     this.postedAt = Date.now();
     this.likes = 0;
-    this.comments = [];
+    this.commentsCount = 0;
   }
 
   toJSON() {
@@ -21,7 +21,7 @@ export class NewPostRequest {
       imageUrl: this.imageUrl,
       postedAt: this.postedAt,
       likes: this.likes,
-      comments: this.comments,
+      commentsCount: this.commentsCount,
     };
   }
 }

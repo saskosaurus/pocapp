@@ -1,5 +1,5 @@
 export class PostData {
-  constructor(id, postedBy, title, description, imageUrl, postedAt, likes, comments) {
+  constructor(id, postedBy, title, description, imageUrl, postedAt, likes, commentsCount) {
     this.id = id;
     this.postedBy = postedBy;
     this.title = title;
@@ -7,6 +7,6 @@ export class PostData {
     this.imageUrl = imageUrl;
     this.postedAt = postedAt;
     this.likes = likes;
-    this.comments = comments;
+    this.commentsCount = commentsCount;
   }
 }

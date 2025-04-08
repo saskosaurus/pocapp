@@ -1,11 +1,11 @@
 <template>
   <div class="comment-item">
     <v-avatar size="25" class="mr-3">
-      <v-img :src="commentDetails.postedBy.avatarImgUrl" cover />
+      <v-img :src="commentDetails.commentData.postedBy.profileImage" cover />
     </v-avatar>
     <div class="comment-content">
-      <span class="username">{{ commentDetails.postedBy.username }}</span>
-      <span class="content">{{ commentDetails.content }}</span>
+      <span class="username">{{ commentDetails.commentData.postedBy.nickname }}</span>
+      <span class="content">{{ commentDetails.commentData.text }}</span>
     </div>
   </div>
 </template>
