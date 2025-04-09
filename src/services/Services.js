@@ -54,6 +54,26 @@ let services = {
   async fetchComments(postId) {
     return await Post.fetchComments(postId);
   },
+
+  async likePost(postId) {
+    try {
+      await Post.likePost(postId);
+      return true;
+    } catch (error) {
+      console.error("Error liking post: ", error);
+      return false;
+    }
+  },
+
+  async deletePost(postId) {
+    try {
+      await Post.deletePost(postId);
+      return true;
+    } catch (error) {
+      console.error("Error deleting post: ", error);
+      return false;
+    }
+  },
 };
 
 export default services;

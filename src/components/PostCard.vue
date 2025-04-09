@@ -3,15 +3,25 @@
     <!-- Avatar Section -->
     <div class="post-header">
       <v-avatar size="35" color="grey-darken-3">
-        <v-img class="align-end text-white" :src="`${postDetails.postedBy.profileImage}`" cover />
+        <v-img
+          class="align-end text-white"
+          :src="`${postDetails.postedBy.profileImage}`"
+          cover />
       </v-avatar>
-      <v-list-item-title class="post-username">{{ postDetails.postedBy.nickname }} • </v-list-item-title>
-      <v-list-item-title class="post-timestamp">{{ formatTime(postDetails) }}</v-list-item-title>
+      <v-list-item-title class="post-username"
+        >{{ postDetails.postedBy.nickname }} •
+      </v-list-item-title>
+      <v-list-item-title class="post-timestamp">{{
+        formatTime(postDetails)
+      }}</v-list-item-title>
     </div>
 
     <!-- Image Section -->
     <div class="post-image" @click="detailsScreen(postDetails.id)">
-      <v-img :src="postDetails.localImageUrl || postDetails.imageUrl" height="300px" class="image-container" />
+      <v-img
+        :src="postDetails.localImageUrl || postDetails.imageUrl"
+        height="300px"
+        class="image-container" />
     </div>
 
     <!-- Details Section -->
@@ -20,21 +30,35 @@
         <template v-slot:prepend>
           <div class="like-section" @click="likePost(postDetails.id)">
             <v-icon class="me-1" icon="mdi-heart-outline"></v-icon>
-            <span v-if="postDetails.likes && postDetails.likes > 0" style="color: black">{{ postDetails.likes }}</span>
+            <span
+              v-if="postDetails.likes && postDetails.likes > 0"
+              style="color: black"
+              >{{ postDetails.likes }}</span
+            >
           </div>
           <div class="comment-section" @click="detailsScreen(postDetails.id)">
             <v-icon class="me-1" icon="mdi-comment-outline"></v-icon>
-            <span v-if="postDetails.commentsCount > 0" style="color: black">{{ postDetails.commentsCount }}</span>
+            <span v-if="postDetails.commentsCount > 0" style="color: black">{{
+              postDetails.commentsCount
+            }}</span>
           </div>
         </template>
         <template v-slot:append>
           <div v-if="showDeletePost()" class="delete-section">
-            <DialogButton iconName="mdi-delete-outline" :nextAction="() => deletePost(postDetails.id)" dialogMessage="Delete post?" dialogTitle="Delete" buttonCancel="no" buttonConfirm="yes" />
+            <DialogButton
+              iconName="mdi-delete-outline"
+              :nextAction="() => deletePost(postDetails.id)"
+              dialogMessage="Delete post?"
+              dialogTitle="Delete"
+              buttonCancel="no"
+              buttonConfirm="yes" />
           </div>
         </template>
       </v-list-item>
     </v-card-actions>
-    <v-list-item class="w-100" v-if="postDetails.title && postDetails.description">
+    <v-list-item
+      class="w-100"
+      v-if="postDetails.title && postDetails.description">
       <template v-slot:prepend>
         <v-card-text>
           <div class="title-section">{{ postDetails.title }}</div>
@@ -48,6 +72,7 @@
 import moment from "moment";
 import { auth, store } from "@/data/InternalStorage";
 import DialogButton from "./DialogButton.vue";
+import Services from "@/services/Services.js";
 
 export default {
   props: ["postDetails"],
@@ -65,21 +90,25 @@ export default {
       this.$router.push({ path: "/postDetails" });
     },
 
-    likePost(postId) {
+    async likePost(postId) {
       console.log("METHOD: likePost");
-      for (let i = 0; i < store.posts.length; i++) {
-        if (postId === store.posts[i].id) {
-          const post = store.posts[i];
-          post.isLiked = !post.isLiked;
-          post.likes = post.isLiked ? post.likes + 1 : post.likes - 1;
-          break;
-        }
+      let selectedPost = store.posts.find((post) => {
+        return post.id === store.selectedPost;
+      });
+      let result = await Services.likePost(postId);
+      if (result) {
+        selectedPost.likes += 1;
       }
     },
 
-    deletePost(postId) {
+    async deletePost(postId) {
       console.log("METHOD: deletePost");
-      store.posts = store.posts.filter((post) => post.id !== postId);
+
+      let result = await Services.deletePost(postId);
+
+      if (result) {
+        store.posts = store.posts.filter((post) => post.id !== postId);
+      }
     },
 
     formatTime(time) {

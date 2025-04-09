@@ -1,5 +1,8 @@
 import { auth, db } from "@/database/Firebase.js";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { dbConstants } from "@/constants/Constants";
 import { UserData } from "@/models/UserData";
@@ -8,7 +11,11 @@ let Authentication = {
   async signUp(signUpRequest) {
     console.log("ENTERED METHOD: signUp");
     try {
-      const user = await createUserWithEmailAndPassword(auth, signUpRequest.email, signUpRequest.password);
+      const user = await createUserWithEmailAndPassword(
+        auth,
+        signUpRequest.email,
+        signUpRequest.password
+      );
       await this.addUserToCollection(signUpRequest, user.user.uid);
       return await this.fetchUserFromCollection(user.user.uid);
     } catch (error) {
@@ -20,7 +27,11 @@ let Authentication = {
   async signIn(signInRequest) {
     console.log("ENTERED METHOD: signIn");
     try {
-      const user = await signInWithEmailAndPassword(auth, signInRequest.email, signInRequest.password);
+      const user = await signInWithEmailAndPassword(
+        auth,
+        signInRequest.email,
+        signInRequest.password
+      );
       return await this.fetchUserFromCollection(user.user.uid);
     } catch (error) {
       console.error("Error: ", error.message);
@@ -32,7 +43,12 @@ let Authentication = {
     console.log("ENTERED METHOD: addUserToCollection");
     try {
       await setDoc(doc(db, dbConstants.USERS, userId), {
-        userData: new UserData(userId, signUpRequest.email, signUpRequest.nickname, "https://i.pravatar.cc/150?u=a042581f4e29026704d").toJSON(),
+        userData: new UserData(
+          userId,
+          signUpRequest.email,
+          signUpRequest.nickname,
+          "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+        ).toJSON(),
       });
     } catch (error) {
       console.error("Error: ", error);
