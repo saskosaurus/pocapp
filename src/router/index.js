@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { store } from "@/data/InternalStorage.js";
+import { auth } from "@/data/InternalStorage.js";
 
 const routes = [
   {
@@ -50,7 +50,7 @@ const router = createRouter({
 });
 
 router.beforeEach((routeTo, routeFrom, next) => {
-  if (!store.isLoggedIn && routeTo.meta.requireAuth) {
+  if (!auth.isAuthenticated() && routeTo.meta.requireAuth) {
     alert("Unauthorized");
     next("login");
   } else {

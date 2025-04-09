@@ -25,24 +25,10 @@ export default {
 
   methods: {
     async fetchPosts() {
-      store.posts = await Services.fetchPosts();
+      const response = await Services.fetchPosts();
+      store.setPosts(response);
     },
   },
-
-  /* computed: {
-    fetchPosts() {
-      console.log("METHOD: fetchPosts");
-      const searchTerm = this.store.searchInput.toLowerCase();
-
-      return store.posts
-        .filter((post) => {
-          const title = post.title?.toLowerCase() || "";
-          const content = post.description?.toLowerCase() || "";
-          return title.includes(searchTerm) || content.includes(searchTerm);
-        })
-        .sort((a, b) => b.postedAt - a.postedAt);
-    },
-  }, */
 
   mounted() {
     this.fetchPosts();

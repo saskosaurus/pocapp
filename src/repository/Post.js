@@ -1,15 +1,5 @@
 import { db } from "@/database/Firebase.js";
-import {
-  doc,
-  collection,
-  setDoc,
-  getDocs,
-  updateDoc,
-  increment,
-  query,
-  where,
-  deleteDoc,
-} from "firebase/firestore";
+import { doc, collection, setDoc, getDocs, updateDoc, increment, query, where, deleteDoc } from "firebase/firestore";
 import { dbConstants } from "@/constants/Constants.js";
 import { PostData } from "@/models/PostData.js";
 import axios from "axios";
@@ -40,15 +30,11 @@ let Post = {
     formData.append("upload_preset", "pocgramUnsigned");
 
     try {
-      const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dm1eb7sdv/image/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("https://api.cloudinary.com/v1_1/dm1eb7sdv/image/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log("Upload to Cloudinary successful", response.data);
       return response.data.secure_url;
@@ -65,16 +51,7 @@ let Post = {
       const fetchedPosts = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data().postData;
-        const post = new PostData(
-          doc.id,
-          data.postedBy || null,
-          data.title || null,
-          data.description || null,
-          data.imageUrl || null,
-          data.postedAt || null,
-          data.likes || null,
-          data.commentsCount || null
-        );
+        const post = new PostData(doc.id, data.postedBy || null, data.title || null, data.description || null, data.imageUrl || null, data.postedAt || null, data.likes || null, data.commentsCount || null);
         fetchedPosts.push(post);
       });
 

@@ -34,7 +34,7 @@ export default {
         return post.id === store.selectedPost;
       });
 
-      let result = await Services.postComment(new Comment(selectedPost.id, this.text, auth.getUser()));
+      let result = await Services.postComment(new Comment(selectedPost.id, this.text, auth.getUser().toJSON()));
 
       if (result) {
         selectedPost.commentsCount += 1;

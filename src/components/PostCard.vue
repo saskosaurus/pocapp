@@ -3,25 +3,15 @@
     <!-- Avatar Section -->
     <div class="post-header">
       <v-avatar size="35" color="grey-darken-3">
-        <v-img
-          class="align-end text-white"
-          :src="`${postDetails.postedBy.profileImage}`"
-          cover />
+        <v-img class="align-end text-white" :src="`${postDetails.postedBy.profileImage}`" cover />
       </v-avatar>
-      <v-list-item-title class="post-username"
-        >{{ postDetails.postedBy.nickname }} •
-      </v-list-item-title>
-      <v-list-item-title class="post-timestamp">{{
-        formatTime(postDetails)
-      }}</v-list-item-title>
+      <v-list-item-title class="post-username">{{ postDetails.postedBy.nickname }} • </v-list-item-title>
+      <v-list-item-title class="post-timestamp">{{ formatTime(postDetails) }}</v-list-item-title>
     </div>
 
     <!-- Image Section -->
     <div class="post-image" @click="detailsScreen(postDetails.id)">
-      <v-img
-        :src="postDetails.localImageUrl || postDetails.imageUrl"
-        height="300px"
-        class="image-container" />
+      <v-img :src="postDetails.localImageUrl || postDetails.imageUrl" height="300px" class="image-container" />
     </div>
 
     <!-- Details Section -->
@@ -30,35 +20,21 @@
         <template v-slot:prepend>
           <div class="like-section" @click="likePost(postDetails.id)">
             <v-icon class="me-1" icon="mdi-heart-outline"></v-icon>
-            <span
-              v-if="postDetails.likes && postDetails.likes > 0"
-              style="color: black"
-              >{{ postDetails.likes }}</span
-            >
+            <span v-if="postDetails.likes && postDetails.likes > 0" style="color: black">{{ postDetails.likes }}</span>
           </div>
           <div class="comment-section" @click="detailsScreen(postDetails.id)">
             <v-icon class="me-1" icon="mdi-comment-outline"></v-icon>
-            <span v-if="postDetails.commentsCount > 0" style="color: black">{{
-              postDetails.commentsCount
-            }}</span>
+            <span v-if="postDetails.commentsCount > 0" style="color: black">{{ postDetails.commentsCount }}</span>
           </div>
         </template>
         <template v-slot:append>
           <div v-if="showDeletePost()" class="delete-section">
-            <DialogButton
-              iconName="mdi-delete-outline"
-              :nextAction="() => deletePost(postDetails.id)"
-              dialogMessage="Delete post?"
-              dialogTitle="Delete"
-              buttonCancel="no"
-              buttonConfirm="yes" />
+            <DialogButton iconName="mdi-delete-outline" :nextAction="() => deletePost(postDetails.id)" dialogMessage="Delete post?" dialogTitle="Delete" buttonCancel="no" buttonConfirm="yes" />
           </div>
         </template>
       </v-list-item>
     </v-card-actions>
-    <v-list-item
-      class="w-100"
-      v-if="postDetails.title && postDetails.description">
+    <v-list-item class="w-100" v-if="postDetails.title && postDetails.description">
       <template v-slot:prepend>
         <v-card-text>
           <div class="title-section">{{ postDetails.title }}</div>
@@ -86,18 +62,22 @@ export default {
   methods: {
     detailsScreen(postId) {
       console.log("METHOD: detailsScreen");
-      store.selectedPost = postId;
+      store.setSelectedPostId(postId);
       this.$router.push({ path: "/postDetails" });
     },
 
     async likePost(postId) {
-      console.log("METHOD: likePost");
-      let selectedPost = store.posts.find((post) => {
-        return post.id === store.selectedPost;
-      });
-      let result = await Services.likePost(postId);
+      console.log("METHOD: likePost", postId);
+
+      const selectedPost = store.posts.find((post) => post.id === postId);
+      if (!selectedPost) {
+        console.warn("Post not found:", postId);
+        return;
+      }
+
+      const result = await Services.likePost(postId);
       if (result) {
-        selectedPost.likes += 1;
+        selectedPost.likes = (selectedPost.likes || 0) + 1;
       }
     },
 
@@ -116,7 +96,8 @@ export default {
     },
 
     showDeletePost() {
-      return auth.getUser().id === this.postDetails.postedBy.id;
+      return true;
+      //return auth.getUser().id === this.postDetails.postedBy.id;
     },
   },
 };

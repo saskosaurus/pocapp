@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-app-bar v-if="store.isLoggedIn">
+      <v-app-bar v-if="isLoggedIn">
         <v-app-bar-title>poc gram</v-app-bar-title>
         <v-card class="mx-auto d-none d-md-block" color="transparent" max-width="400" width="400" variant="flat" v-if="this.$route.path === '/'">
           <v-card-text>
@@ -25,7 +25,7 @@
         <v-btn class="nav-btn" @click="newPost()">NEW POST</v-btn>
         <v-btn class="nav-btn" @click="logout()">LOGOUT</v-btn>
         <v-avatar size="30" style="margin-right: 15px">
-          <v-img alt="John" :src="`${auth.getUser().profileImage}`"></v-img>
+          <v-img alt="John" :src="profileImage"></v-img>
         </v-avatar>
       </v-app-bar>
       <div id="routerView">
@@ -45,9 +45,6 @@ export default {
   },
 
   methods: {
-    isLoggedIn() {
-      return auth.isAuthenticated();
-    },
     getUsername() {
       return auth.getUser();
     },
@@ -75,6 +72,16 @@ export default {
     },
     emptySearch() {
       store.searchInput = "";
+    },
+  },
+
+  computed: {
+    isLoggedIn() {
+      return auth.isAuthenticated();
+    },
+
+    profileImage() {
+      return this.isLoggedIn ? auth.getUser()?.profileImage : null;
     },
   },
 };

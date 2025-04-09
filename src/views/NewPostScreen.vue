@@ -50,7 +50,7 @@ export default {
       console.log("ENTERED METHOD: post");
 
       this.imageUrl = await Services.uploadImageToCloudinary(this.file);
-      const newPostRequest = new NewPostRequest(auth.getUser(), this.title, this.description, this.imageUrl);
+      const newPostRequest = new NewPostRequest(auth.getUser().toJSON(), this.title, this.description, this.imageUrl);
       await Services.newPost(newPostRequest);
 
       store.posts.push(newPostRequest);

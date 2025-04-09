@@ -1,39 +1,42 @@
 import { reactive } from "vue";
-import { posts } from "@/data/MockData.js";
 
 let store = reactive({
-  isLoggedIn: null,
   searchInput: "",
-  posts: posts,
-  selectedPost: null,
+  posts: JSON.parse(sessionStorage.getItem("posts")) || [],
+  selectedPost: sessionStorage.getItem("selectedPostId"),
+
+  setPosts(posts) {
+    this.posts = posts;
+    sessionStorage.setItem("posts", JSON.stringify(posts));
+  },
+
+  setSelectedPostId(postId) {
+    this.selectedPost = postId;
+    sessionStorage.setItem("selectedPostId", postId);
+  },
 });
 
 let auth = reactive({
+  user: JSON.parse(sessionStorage.getItem("userData")) || null,
+
   setUser(userData) {
-    store.isLoggedIn = true;
-    localStorage.setItem("userData", JSON.stringify(userData));
+    this.user = userData;
+    sessionStorage.setItem("userData", JSON.stringify(userData));
     return true;
   },
 
   getUser() {
-    return JSON.parse(localStorage.getItem("userData"));
+    return this.user;
   },
 
   isAuthenticated() {
-    return store.isLoggedIn;
+    return !!this.user;
   },
 
   logOutUser() {
-    this.removeUserData();
     console.log("Logging out user;");
-    store.isLoggedIn = false;
-    return;
-  },
-
-  removeUserData() {
-    console.log("removeUserData");
-    localStorage.removeItem("userData");
-    return;
+    this.user = null;
+    sessionStorage.removeItem("userData");
   },
 });
 
