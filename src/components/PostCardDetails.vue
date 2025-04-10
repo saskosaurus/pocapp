@@ -56,19 +56,19 @@ export default {
 
   methods: {
     async likePost(postId) {
-      console.log("METHOD: likePost", postId);
+      console.log("METHOD: likePost");
 
       const selectedPost = store.posts.find((post) => post.id === postId);
 
       if (!selectedPost) {
         console.warn("Post not found:", postId);
         return;
-      }
-
-      const result = await Services.likePost(postId);
-
-      if (result) {
-        selectedPost.likes = (selectedPost.likes || 0) + 1;
+      } else {
+        const result = await Services.likePost(postId);
+        if (result) {
+          selectedPost.likes = (selectedPost.likes || 0) + 1;
+        }
+        return;
       }
     },
 

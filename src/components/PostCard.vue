@@ -61,23 +61,24 @@ export default {
 
   methods: {
     detailsScreen(postId) {
-      console.log("METHOD: detailsScreen");
+      console.log("NAVIGATE: /postDetails");
       store.setSelectedPostId(postId);
       this.$router.push({ path: "/postDetails" });
     },
 
     async likePost(postId) {
-      console.log("METHOD: likePost", postId);
+      console.log("METHOD: likePost");
 
       const selectedPost = store.posts.find((post) => post.id === postId);
       if (!selectedPost) {
         console.warn("Post not found:", postId);
         return;
-      }
-
-      const result = await Services.likePost(postId);
-      if (result) {
-        selectedPost.likes = (selectedPost.likes || 0) + 1;
+      } else {
+        const result = await Services.likePost(postId);
+        if (result) {
+          selectedPost.likes = (selectedPost.likes || 0) + 1;
+        }
+        return;
       }
     },
 
@@ -85,7 +86,6 @@ export default {
       console.log("METHOD: deletePost");
 
       let result = await Services.deletePost(postId);
-
       if (result) {
         store.posts = store.posts.filter((post) => post.id !== postId);
       }

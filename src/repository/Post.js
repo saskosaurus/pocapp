@@ -6,46 +6,41 @@ import axios from "axios";
 
 let Post = {
   async newPost(newPostRequest) {
-    console.log("ENTERED METHOD: newPost");
     try {
       await setDoc(doc(db, dbConstants.POSTS, newPostRequest.id), {
         postData: newPostRequest,
       });
       return true;
     } catch (error) {
-      console.error("Error: ", error);
-      return null;
+      console.error("Error creating new post: ", error);
+      return false;
     }
   },
 
   async uploadImageToCloudinary(file) {
-    console.log("ENTERED METHOD: uploadImageToCloudinary");
     if (!file) {
       console.alert("Image file is missing!");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "pocgramUnsigned");
-
     try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "pocgramUnsigned");
       const response = await axios.post("https://api.cloudinary.com/v1_1/dm1eb7sdv/image/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log("Upload to Cloudinary successful", response.data);
+      console.log("Upload to storage successful");
       return response.data.secure_url;
     } catch (error) {
-      console.error("Cloudinary upload failed", error);
+      console.error("Storage upload failed", error);
       return null;
     }
   },
 
   async fetchPosts() {
-    console.log("ENTERED METHOD: fetchPosts");
     try {
       const querySnapshot = await getDocs(collection(db, dbConstants.POSTS));
       const fetchedPosts = [];
@@ -54,8 +49,6 @@ let Post = {
         const post = new PostData(doc.id, data.postedBy || null, data.title || null, data.description || null, data.imageUrl || null, data.postedAt || null, data.likes || null, data.commentsCount || null);
         fetchedPosts.push(post);
       });
-
-      console.log("Posts fetched:", fetchedPosts);
       return fetchedPosts;
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -64,7 +57,6 @@ let Post = {
   },
 
   async postComment(comment) {
-    console.log("ENTERED METHOD: postComment");
     try {
       await setDoc(doc(db, dbConstants.COMMENTS, comment.id), {
         commentData: comment,
@@ -74,19 +66,17 @@ let Post = {
       await updateDoc(postRef, {
         "postData.commentsCount": increment(1),
       });
-
       return true;
     } catch (error) {
-      console.error("Error: ", error);
-      return null;
+      console.error("Error posting comment: ", error);
+      return false;
     }
   },
 
   async fetchComments(postId) {
-    console.log("ENTERED METHOD: fetchComments");
-    const commentsRef = collection(db, dbConstants.COMMENTS);
-    const q = query(commentsRef, where("commentData.postId", "==", postId));
     try {
+      const commentsRef = collection(db, dbConstants.COMMENTS);
+      const q = query(commentsRef, where("commentData.postId", "==", postId));
       const querySnapshot = await getDocs(q);
       const comments = [];
       querySnapshot.forEach((doc) => {
@@ -100,29 +90,26 @@ let Post = {
   },
 
   async likePost(postId) {
-    console.log("ENTERED METHOD: likePost");
     try {
       const postRef = doc(db, dbConstants.POSTS, postId);
       await updateDoc(postRef, {
         "postData.likes": increment(1),
       });
-
       return true;
     } catch (error) {
-      console.error("Error: ", error);
-      return null;
+      console.error("Error liking post: ", error);
+      return false;
     }
   },
 
   async deletePost(postId) {
-    console.log("ENTERED METHOD: deletePost");
     try {
       const postRef = doc(db, dbConstants.POSTS, postId);
       await deleteDoc(postRef);
       return true;
     } catch (error) {
-      console.error("Error: ", error);
-      return null;
+      console.error("Error deleting post: ", error);
+      return false;
     }
   },
 };

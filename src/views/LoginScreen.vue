@@ -24,7 +24,6 @@
 
 <script>
 import Services from "@/services/Services.js";
-import { SignInRequest } from "@/models/SignInRequest.js";
 
 export default {
   name: "LoginScreen",
@@ -37,8 +36,7 @@ export default {
     async login() {
       console.log("METHOD: login");
 
-      let response = await Services.signIn(new SignInRequest(this.username, this.password));
-
+      let response = await Services.signIn(this.username, this.password);
       if (response) {
         this.$router.push({ path: "/" });
         return;

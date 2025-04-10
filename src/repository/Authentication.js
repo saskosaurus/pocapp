@@ -6,7 +6,6 @@ import { UserData } from "@/models/UserData";
 
 let Authentication = {
   async signUp(signUpRequest) {
-    console.log("ENTERED METHOD: signUp");
     try {
       const user = await createUserWithEmailAndPassword(auth, signUpRequest.email, signUpRequest.password);
       await this.addUserToCollection(signUpRequest, user.user.uid);
@@ -18,7 +17,6 @@ let Authentication = {
   },
 
   async signIn(signInRequest) {
-    console.log("ENTERED METHOD: signIn");
     try {
       const user = await signInWithEmailAndPassword(auth, signInRequest.email, signInRequest.password);
       return await this.fetchUserFromCollection(user.user.uid);
@@ -29,19 +27,16 @@ let Authentication = {
   },
 
   async addUserToCollection(signUpRequest, userId) {
-    console.log("ENTERED METHOD: addUserToCollection");
     try {
       await setDoc(doc(db, dbConstants.USERS, userId), {
         userData: new UserData(userId, signUpRequest.email, signUpRequest.nickname, "https://i.pravatar.cc/150?u=a042581f4e29026704d").toJSON(),
       });
     } catch (error) {
       console.error("Error: ", error);
-      return null;
     }
   },
 
   async fetchUserFromCollection(userId) {
-    console.log("ENTERED METHOD: fetchUserFromCollection");
     try {
       const user = await getDoc(doc(db, dbConstants.USERS, userId));
       if (user.exists()) {

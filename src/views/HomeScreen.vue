@@ -23,15 +23,8 @@ export default {
     return { auth, store };
   },
 
-  methods: {
-    async fetchPosts() {
-      const response = await Services.fetchPosts();
-      store.setPosts(response);
-    },
-  },
-
-  mounted() {
-    this.fetchPosts();
+  async mounted() {
+    await Services.fetchPosts();
   },
 };
 </script>

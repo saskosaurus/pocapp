@@ -51,6 +51,6 @@ export default {
 
 .align-center {
   display: flex;
-  align-items: center; /* Ensure avatar stays vertically centered */
+  align-items: center;
 }
 </style>

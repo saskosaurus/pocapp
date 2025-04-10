@@ -9,10 +9,9 @@
 </template>
 
 <script>
-import { store, auth } from "@/data/InternalStorage.js";
+import { store } from "@/data/InternalStorage.js";
 import CommentItem from "./CommentItem.vue";
 import Services from "@/services/Services.js";
-import { Comment } from "@/models/Comment.js";
 export default {
   components: {
     CommentItem,
@@ -26,21 +25,20 @@ export default {
     async postComment() {
       console.log("METHOD: postComment");
 
-      if (this.text === null) {
+      if (this.text != null) {
+        let selectedPost = store.posts.find((post) => {
+          return post.id === store.selectedPost;
+        });
+
+        let result = await Services.postComment(selectedPost.id, this.text);
+        if (result) {
+          selectedPost.commentsCount += 1;
+          this.comment = null;
+          blur();
+        }
+      } else {
         return;
       }
-
-      let selectedPost = store.posts.find((post) => {
-        return post.id === store.selectedPost;
-      });
-
-      let result = await Services.postComment(new Comment(selectedPost.id, this.text, auth.getUser().toJSON()));
-
-      if (result) {
-        selectedPost.commentsCount += 1;
-      }
-      this.comment = null;
-      blur();
     },
   },
 

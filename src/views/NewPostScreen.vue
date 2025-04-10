@@ -23,9 +23,7 @@
 </template>
 
 <script>
-import { store, auth } from "@/data/InternalStorage.js";
 import DialogButton from "@/components/DialogButton.vue";
-import { NewPostRequest } from "@/models/NewPostRequest.js";
 import Services from "@/services/Services.js";
 
 export default {
@@ -40,25 +38,23 @@ export default {
       imageUrl: null,
       previewUrl: null,
       file: null,
-      store,
-      auth,
     };
   },
 
   methods: {
     async post() {
-      console.log("ENTERED METHOD: post");
+      console.log("METHOD: post");
 
       this.imageUrl = await Services.uploadImageToCloudinary(this.file);
-      const newPostRequest = new NewPostRequest(auth.getUser().toJSON(), this.title, this.description, this.imageUrl);
-      await Services.newPost(newPostRequest);
-
-      store.posts.push(newPostRequest);
-      return this.$router.push({ path: "/" });
+      if (this.imageUrl != null) {
+        const response = await Services.newPost(this.title, this.description, this.imageUrl);
+        if (response) {
+          return this.$router.push({ path: "/" });
+        }
+      }
     },
 
     handleFileInput(event) {
-      console.log("ENTERED METHOD: handleFileInput");
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();

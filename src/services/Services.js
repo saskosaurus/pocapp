@@ -1,10 +1,17 @@
 import Authentication from "@/repository/Authentication.js";
 import Post from "@/repository/Post.js";
-import { auth } from "@/data/InternalStorage";
+import { auth, store } from "@/data/InternalStorage";
+import { SignUpRequest } from "@/models/SignUpRequest";
+import { SignInRequest } from "@/models/SignInRequest.js";
+import { NewPostRequest } from "@/models/NewPostRequest.js";
+import { Comment } from "@/models/Comment.js";
 
 let services = {
-  async signUp(signUpRequest) {
+  async signUp(email, password, nickname) {
+    const signUpRequest = new SignUpRequest(email, password, nickname);
+    console.log("Request: ", signUpRequest);
     const response = await Authentication.signUp(signUpRequest);
+    console.log("Response: ", response);
     if (response) {
       auth.setUser(response);
       return true;
@@ -13,8 +20,11 @@ let services = {
     }
   },
 
-  async signIn(signInRequest) {
+  async signIn(email, password) {
+    const signInRequest = new SignInRequest(email, password);
+    console.log("Request: ", signInRequest);
     const response = await Authentication.signIn(signInRequest);
+    console.log("Response: ", response);
     if (response) {
       auth.setUser(response);
       return true;
@@ -23,56 +33,62 @@ let services = {
     }
   },
 
-  async newPost(newPostRequest) {
-    try {
-      await Post.newPost(newPostRequest.toJSON());
+  async newPost(title, description, imageUrl) {
+    const newPostRequest = new NewPostRequest(auth.getUser().toJSON(), title, description, imageUrl);
+    console.log("Request: ", newPostRequest);
+    const response = await Post.newPost(newPostRequest.toJSON());
+    console.log("Response: ", response);
+    if (response) {
+      store.posts.push(newPostRequest);
       return true;
-    } catch (error) {
-      console.error("Error making new post: ", error);
+    } else {
       return false;
     }
   },
 
   async uploadImageToCloudinary(file) {
-    return await Post.uploadImageToCloudinary(file);
+    console.log("Request: ", file);
+    const response = await Post.uploadImageToCloudinary(file);
+    console.log(response);
+    return response;
   },
 
   async fetchPosts() {
-    return await Post.fetchPosts();
+    const response = await Post.fetchPosts();
+    console.log("Fetched posts: ", response);
+    if (response != null) {
+      store.setPosts(response);
+    }
+    return response;
   },
 
-  async postComment(comment) {
-    try {
-      await Post.postComment(comment.toJSON());
-      return true;
-    } catch (error) {
-      console.error("Error posting comment: ", error);
-      return false;
-    }
+  async postComment(postId, text) {
+    const comment = new Comment(postId, text, auth.getUser().toJSON());
+    console.log("Request: ", comment);
+    const response = await Post.postComment(comment.toJSON());
+    console.log("Response: ", response);
+    return response;
   },
 
   async fetchComments(postId) {
-    return await Post.fetchComments(postId);
+    console.log("Request: ", postId);
+    const response = await Post.fetchComments(postId);
+    console.log("Response: ", response);
+    return response;
   },
 
   async likePost(postId) {
-    try {
-      await Post.likePost(postId);
-      return true;
-    } catch (error) {
-      console.error("Error liking post: ", error);
-      return false;
-    }
+    console.log("Request: ", postId);
+    const response = await Post.likePost(postId);
+    console.log("Response: ", response);
+    return response;
   },
 
   async deletePost(postId) {
-    try {
-      await Post.deletePost(postId);
-      return true;
-    } catch (error) {
-      console.error("Error deleting post: ", error);
-      return false;
-    }
+    console.log("Request: ", postId);
+    const response = await Post.deletePost(postId);
+    console.log("Response: ", response);
+    return response;
   },
 };
 

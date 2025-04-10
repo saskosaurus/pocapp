@@ -23,7 +23,6 @@
 
 <script>
 import Services from "@/services/Services.js";
-import { SignUpRequest } from "@/models/SignUpRequest";
 export default {
   name: "LoginScreen",
 
@@ -35,7 +34,7 @@ export default {
     async register() {
       console.log("METHOD: register");
 
-      let response = await Services.signUp(new SignUpRequest(this.email, this.password, this.nickname));
+      let response = await Services.signUp(this.email, this.password, this.nickname);
       if (response) {
         this.$router.push({ path: "/" });
         return;
