@@ -18,7 +18,7 @@ export default {
   },
 
   data() {
-    return { text: null, comments: null };
+    return { text: null, comments: [] };
   },
 
   methods: {
@@ -30,10 +30,12 @@ export default {
           return post.id === store.selectedPost;
         });
 
-        let result = await Services.postComment(selectedPost.id, this.text);
-        if (result) {
+        let result = await Services.postComment(selectedPost.id, this.text, this.comments);
+        if (result != null) {
           selectedPost.commentsCount += 1;
           this.comment = null;
+          this.comments.push(result);
+          this.comments.sort((a, b) => b.postedAt - a.postedAt);
           blur();
         }
       } else {
@@ -47,6 +49,7 @@ export default {
       return post.id === store.selectedPost;
     });
     this.comments = await Services.fetchComments(selectedPost.id);
+    this.comments.sort((a, b) => b.postedAt - a.postedAt);
   },
 };
 </script>

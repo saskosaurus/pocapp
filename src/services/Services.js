@@ -1,10 +1,13 @@
 import Authentication from "@/repository/Authentication.js";
 import Post from "@/repository/Post.js";
+import Cloudinary from "@/repository/Cloudinary.js";
+import Profile from "@/repository/Profile.js";
 import { auth, store } from "@/data/InternalStorage";
 import { SignUpRequest } from "@/models/SignUpRequest";
 import { SignInRequest } from "@/models/SignInRequest.js";
 import { NewPostRequest } from "@/models/NewPostRequest.js";
 import { NewCommentRequest } from "@/models/NewCommentRequest.js";
+import { UserData } from "@/models/UserData";
 
 let services = {
   async signUp(email, password, nickname) {
@@ -48,7 +51,7 @@ let services = {
 
   async uploadImageToCloudinary(file) {
     console.log("Request: ", file);
-    const response = await Post.uploadImageToCloudinary(file);
+    const response = await Cloudinary.uploadImageToCloudinary(file);
     console.log(response);
     return response;
   },
@@ -67,7 +70,10 @@ let services = {
     console.log("Request: ", newCommentRequest);
     const response = await Post.postComment(newCommentRequest.toJSON());
     console.log("Response: ", response);
-    return response;
+    if (response) {
+      return newCommentRequest;
+    }
+    return null;
   },
 
   async fetchComments(postId) {
@@ -89,6 +95,20 @@ let services = {
     const response = await Post.deletePost(postId);
     console.log("Response: ", response);
     return response;
+  },
+
+  async editProfile(nickname, imageUrl) {
+    const currentUser = auth.getUser();
+    const userData = new UserData(currentUser.id, currentUser.email, nickname, imageUrl);
+    console.log("Request: ", userData);
+    const response = await Profile.editProfile(userData);
+    console.log("Response: ", response);
+    if (response) {
+      auth.setUser(userData);
+      return response;
+    } else {
+      return false;
+    }
   },
 };
 

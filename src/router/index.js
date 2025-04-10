@@ -42,6 +42,14 @@ const routes = [
       requireAuth: true,
     },
   },
+  {
+    path: "/editProfile",
+    name: "editProfile",
+    component: () => import("../views/EditProfileScreen.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
 ];
 
 const router = createRouter({

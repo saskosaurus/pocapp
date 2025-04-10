@@ -24,7 +24,7 @@
         <v-btn class="nav-btn" @click="home()">HOME</v-btn>
         <v-btn class="nav-btn" @click="newPost()">NEW POST</v-btn>
         <v-btn class="nav-btn" @click="logout()">LOGOUT</v-btn>
-        <v-avatar size="30" style="margin-right: 15px">
+        <v-avatar size="30" style="margin-right: 15px" @click="editProfile()">
           <v-img alt="John" :src="profileImage"></v-img>
         </v-avatar>
       </v-app-bar>
@@ -69,6 +69,10 @@ export default {
     newPost() {
       console.log("NAVIGATE: newPost");
       this.$router.push({ path: "/newPost" });
+    },
+    editProfile() {
+      console.log("NAVIGATE: editProfile");
+      this.$router.push({ path: "/editProfile" });
     },
     emptySearch() {
       store.searchInput = "";

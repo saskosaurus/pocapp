@@ -3,7 +3,6 @@ import { doc, collection, setDoc, getDocs, updateDoc, increment, query, where, d
 import { dbConstants } from "@/constants/Constants.js";
 import { PostData } from "@/models/PostData.js";
 import { CommentData } from "@/models/CommentData.js";
-import axios from "axios";
 
 let Post = {
   async newPost(newPostRequest) {
@@ -15,29 +14,6 @@ let Post = {
     } catch (error) {
       console.error("Error creating new post: ", error);
       return false;
-    }
-  },
-
-  async uploadImageToCloudinary(file) {
-    if (!file) {
-      console.alert("Image file is missing!");
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "pocgramUnsigned");
-      const response = await axios.post("https://api.cloudinary.com/v1_1/dm1eb7sdv/image/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Upload to storage successful");
-      return response.data.secure_url;
-    } catch (error) {
-      console.error("Storage upload failed", error);
-      return null;
     }
   },
 

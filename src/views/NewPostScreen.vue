@@ -35,7 +35,6 @@ export default {
     return {
       title: null,
       description: null,
-      imageUrl: null,
       previewUrl: null,
       file: null,
     };
@@ -45,9 +44,9 @@ export default {
     async post() {
       console.log("METHOD: post");
 
-      this.imageUrl = await Services.uploadImageToCloudinary(this.file);
-      if (this.imageUrl != null) {
-        const response = await Services.newPost(this.title, this.description, this.imageUrl);
+      const imageUrl = await Services.uploadImageToCloudinary(this.file);
+      if (imageUrl != null) {
+        const response = await Services.newPost(this.title, this.description, imageUrl);
         if (response) {
           return this.$router.push({ path: "/" });
         }
