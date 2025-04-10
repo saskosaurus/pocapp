@@ -1,5 +1,5 @@
 import ShortUniqueId from "short-uuid";
-export class Comment {
+export class NewCommentRequest {
   constructor(postId, text, postedBy) {
     this.id = ShortUniqueId().new();
     this.postId = postId;

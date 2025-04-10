@@ -4,7 +4,7 @@ import { auth, store } from "@/data/InternalStorage";
 import { SignUpRequest } from "@/models/SignUpRequest";
 import { SignInRequest } from "@/models/SignInRequest.js";
 import { NewPostRequest } from "@/models/NewPostRequest.js";
-import { Comment } from "@/models/Comment.js";
+import { NewCommentRequest } from "@/models/NewCommentRequest.js";
 
 let services = {
   async signUp(email, password, nickname) {
@@ -63,9 +63,9 @@ let services = {
   },
 
   async postComment(postId, text) {
-    const comment = new Comment(postId, text, auth.getUser().toJSON());
-    console.log("Request: ", comment);
-    const response = await Post.postComment(comment.toJSON());
+    const newCommentRequest = new NewCommentRequest(postId, text, auth.getUser().toJSON());
+    console.log("Request: ", newCommentRequest);
+    const response = await Post.postComment(newCommentRequest.toJSON());
     console.log("Response: ", response);
     return response;
   },

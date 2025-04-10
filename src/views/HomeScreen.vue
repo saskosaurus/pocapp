@@ -3,7 +3,9 @@
     <v-row justify="center" align="center" class="d-flex">
       <v-col cols="12" sm="12" md="12" lg="12">
         <v-sheet class="pa-2 ma-3">
-          <post-card v-for="post in store.posts" :key="post.id" :postDetails="post" />
+          <transition-group name="post" tag="div">
+            <post-card v-for="post in sortedPosts" :key="post.id" :postDetails="post" />
+          </transition-group>
         </v-sheet>
       </v-col>
     </v-row>
@@ -23,6 +25,12 @@ export default {
     return { auth, store };
   },
 
+  computed: {
+    sortedPosts() {
+      return [...this.store.posts].sort((a, b) => b.postedAt - a.postedAt);
+    },
+  },
+
   async mounted() {
     await Services.fetchPosts();
   },
@@ -39,5 +47,15 @@ export default {
 }
 .v-col {
   background-color: transparent;
+}
+
+.post-enter-active,
+.post-leave-active {
+  transition: all 0.5s ease;
+}
+.post-enter-from,
+.post-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>

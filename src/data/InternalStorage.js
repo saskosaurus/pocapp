@@ -1,4 +1,5 @@
 import { reactive } from "vue";
+import { UserData } from "@/models/UserData.js";
 
 let store = reactive({
   searchInput: "",
@@ -26,7 +27,7 @@ let auth = reactive({
   },
 
   getUser() {
-    return this.user;
+    return new UserData(this.user.id, this.user.email, this.user.nickname, this.user.profileImage);
   },
 
   isAuthenticated() {

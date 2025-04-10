@@ -2,6 +2,7 @@ import { db } from "@/database/Firebase.js";
 import { doc, collection, setDoc, getDocs, updateDoc, increment, query, where, deleteDoc } from "firebase/firestore";
 import { dbConstants } from "@/constants/Constants.js";
 import { PostData } from "@/models/PostData.js";
+import { CommentData } from "@/models/CommentData.js";
 import axios from "axios";
 
 let Post = {
@@ -56,13 +57,13 @@ let Post = {
     }
   },
 
-  async postComment(comment) {
+  async postComment(newCommentRequest) {
     try {
-      await setDoc(doc(db, dbConstants.COMMENTS, comment.id), {
-        commentData: comment,
+      await setDoc(doc(db, dbConstants.COMMENTS, newCommentRequest.id), {
+        commentData: newCommentRequest,
       });
 
-      const postRef = doc(db, dbConstants.POSTS, comment.postId);
+      const postRef = doc(db, dbConstants.POSTS, newCommentRequest.postId);
       await updateDoc(postRef, {
         "postData.commentsCount": increment(1),
       });
@@ -80,7 +81,9 @@ let Post = {
       const querySnapshot = await getDocs(q);
       const comments = [];
       querySnapshot.forEach((doc) => {
-        comments.push(doc.data());
+        const data = doc.data().commentData;
+        const comment = new CommentData(doc.id, data.postId || null, data.text || null, data.postedBy || null, data.postedAt || null);
+        comments.push(comment);
       });
       return comments;
     } catch (error) {
