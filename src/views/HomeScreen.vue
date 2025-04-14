@@ -22,7 +22,13 @@ export default {
   components: { PostCard },
 
   data() {
-    return { auth, store };
+    return {
+      auth,
+      store,
+      hasMorePosts: false,
+      loadingPosts: false,
+      lastDoc: null,
+    };
   },
 
   computed: {
@@ -32,23 +38,43 @@ export default {
   },
 
   async mounted() {
-    await Services.fetchPosts();
+    document.addEventListener("scroll", this.handleScroll);
+    const response = await Services.fetchPosts();
+    if (response.hasMore) {
+      this.lastDoc = response.lastDoc;
+      this.hasMorePosts = true;
+    } else {
+      this.hasMorePosts = false;
+    }
+  },
+  beforeUnmount() {
+    document.removeEventListener("scroll", this.handleScroll);
+  },
+
+  methods: {
+    async handleScroll() {
+      const scrollY = window.scrollY;
+      const visible = window.innerHeight;
+      const pageHeight = document.documentElement.scrollHeight;
+
+      // Enter condition almost at the end of the page
+      if (scrollY + visible >= pageHeight - 100) {
+        if (this.hasMorePosts && !this.loadingPosts) {
+          this.loadingPosts = true;
+          const response = await Services.fetchMorePosts(this.lastDoc);
+          if (response && !response.hasMore) {
+            this.hasMorePosts = false;
+          }
+          this.lastDoc = response.lastDoc;
+          this.loadingPosts = false;
+        }
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.v-container {
-  background-color: transparent;
-}
-.v-sheet {
-  text-align: center;
-  background-color: transparent;
-}
-.v-col {
-  background-color: transparent;
-}
-
 .post-enter-active,
 .post-leave-active {
   transition: all 0.5s ease;

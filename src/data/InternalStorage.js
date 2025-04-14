@@ -11,6 +11,13 @@ let store = reactive({
     sessionStorage.setItem("posts", JSON.stringify(posts));
   },
 
+  addPosts(newPosts) {
+    const existingIds = new Set(this.posts.map((post) => post.id));
+    const filteredNewPosts = newPosts.filter((post) => !existingIds.has(post.id));
+    this.posts = [...this.posts, ...filteredNewPosts];
+    sessionStorage.setItem("posts", JSON.stringify(this.posts));
+  },
+
   setSelectedPostId(postId) {
     this.selectedPost = postId;
     sessionStorage.setItem("selectedPostId", postId);

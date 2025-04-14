@@ -57,10 +57,19 @@ let services = {
   },
 
   async fetchPosts() {
-    const response = await Post.fetchPosts();
+    const response = await Post.fetchPosts(null);
     console.log("Fetched posts: ", response);
     if (response != null) {
-      store.setPosts(response);
+      store.setPosts(response.posts);
+    }
+    return response;
+  },
+
+  async fetchMorePosts(lastDoc) {
+    const response = await Post.fetchPosts(lastDoc);
+    console.log("Fetched more posts: ", response);
+    if (response != null) {
+      store.addPosts(response.posts);
     }
     return response;
   },

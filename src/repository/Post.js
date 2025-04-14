@@ -1,5 +1,5 @@
 import { db } from "@/database/Firebase.js";
-import { doc, collection, setDoc, getDocs, updateDoc, increment, query, where, deleteDoc } from "firebase/firestore";
+import { doc, collection, setDoc, getDocs, updateDoc, increment, query, where, deleteDoc, orderBy, limit, startAfter } from "firebase/firestore";
 import { dbConstants } from "@/constants/Constants.js";
 import { PostData } from "@/models/PostData.js";
 import { CommentData } from "@/models/CommentData.js";
@@ -17,16 +17,30 @@ let Post = {
     }
   },
 
-  async fetchPosts() {
+  async fetchPosts(lastVisible = null) {
     try {
-      const querySnapshot = await getDocs(collection(db, dbConstants.POSTS));
+      let q = collection(db, dbConstants.POSTS);
+      if (lastVisible) {
+        q = query(q, orderBy("postData.postedAt", "desc"), startAfter(lastVisible), limit(6));
+      } else {
+        q = query(q, orderBy("postData.postedAt", "desc"), limit(6));
+      }
+
+      const querySnapshot = await getDocs(q);
       const fetchedPosts = [];
-      querySnapshot.forEach((doc) => {
+      const docs = querySnapshot.docs; // get array of docs
+      const hasMore = docs.length === 6; // if 6 items were fetched, there is more!
+      const docsToMap = hasMore ? docs.slice(0, 5) : docs; // only map first 5 posts
+
+      docsToMap.forEach((doc) => {
         const data = doc.data().postData;
         const post = new PostData(doc.id, data.postedBy || null, data.title || null, data.description || null, data.imageUrl || null, data.postedAt || null, data.likes || null, data.commentsCount || null);
         fetchedPosts.push(post);
       });
-      return fetchedPosts;
+
+      const lastDoc = docsToMap[docsToMap.length - 1]; // last mapped doc (5th post)
+
+      return { posts: fetchedPosts, lastDoc, hasMore };
     } catch (error) {
       console.error("Error fetching posts:", error);
       return null;
