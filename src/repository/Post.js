@@ -1,5 +1,5 @@
 import { db } from "@/database/Firebase.js";
-import { doc, collection, setDoc, getDocs, updateDoc, increment, query, where, deleteDoc, orderBy, limit, startAfter } from "firebase/firestore";
+import { doc, collection, setDoc, getDocs, getDoc, updateDoc, increment, query, where, deleteDoc, orderBy, limit, startAfter } from "firebase/firestore";
 import { dbConstants } from "@/constants/Constants.js";
 import { PostData } from "@/models/PostData.js";
 import { CommentData } from "@/models/CommentData.js";
@@ -43,6 +43,21 @@ let Post = {
       return { posts: fetchedPosts, lastDoc, hasMore };
     } catch (error) {
       console.error("Error fetching posts:", error);
+      return null;
+    }
+  },
+
+  async fetchPost(postId) {
+    try {
+      const postsRef = doc(db, dbConstants.POSTS, postId);
+      const post = await getDoc(postsRef);
+      if (post.exists()) {
+        return PostData.fromFirestore(post);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching selected post: ", error);
       return null;
     }
   },

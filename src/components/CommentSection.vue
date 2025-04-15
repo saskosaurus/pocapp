@@ -26,14 +26,9 @@ export default {
       console.log("METHOD: postComment");
 
       if (this.text != null) {
-        let selectedPost = store.posts.find((post) => {
-          return post.id === store.selectedPost;
-        });
-
-        let result = await Services.postComment(selectedPost.id, this.text, this.comments);
+        let result = await Services.postComment(store.selectedPost, this.text, this.comments);
         if (result != null) {
-          selectedPost.commentsCount += 1;
-          this.comment = null;
+          this.text = null;
           this.comments.push(result);
           this.comments.sort((a, b) => b.postedAt - a.postedAt);
           blur();

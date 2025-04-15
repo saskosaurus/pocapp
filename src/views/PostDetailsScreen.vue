@@ -3,7 +3,7 @@
     <v-row justify="center" align="center" class="d-flex">
       <v-col cols="12" sm="12" md="12" lg="12">
         <v-sheet class="pa-2 ma-3">
-          <PostCardDetails :postDetails="fetchSelectedPost" />
+          <PostCardDetails v-if="selectedPost" :postDetails="selectedPost" />
         </v-sheet>
       </v-col>
     </v-row>
@@ -12,24 +12,19 @@
 
 <script>
 import PostCardDetails from "@/components/PostCardDetails.vue";
-import { store } from "@/data/InternalStorage.js";
+import Services from "@/services/Services";
 export default {
   name: "PostDetailsScreen",
 
   components: { PostCardDetails },
 
   data() {
-    return {};
+    return { selectedPost: null };
   },
 
-  computed: {
-    fetchSelectedPost() {
-      console.log("METHOD: fetchSelectedPost");
-      let selectedPost = store.posts.find((post) => {
-        return post.id === store.selectedPost;
-      });
-      return selectedPost;
-    },
+  async mounted() {
+    console.log("METHOD: fetchSelectedPost");
+    this.selectedPost = await Services.fetchSelectedPost();
   },
 };
 </script>

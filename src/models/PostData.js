@@ -9,4 +9,9 @@ export class PostData {
     this.likes = likes;
     this.commentsCount = commentsCount;
   }
+
+  static fromFirestore(docSnapshot) {
+    const data = docSnapshot.data().postData;
+    return new PostData(data.id, data.postedBy, data.title, data.description, data.imageUrl, data.postedAt, data.likes, data.commentsCount);
+  }
 }

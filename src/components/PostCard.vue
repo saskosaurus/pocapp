@@ -68,27 +68,12 @@ export default {
 
     async likePost(postId) {
       console.log("METHOD: likePost");
-
-      const selectedPost = store.posts.find((post) => post.id === postId);
-      if (!selectedPost) {
-        console.warn("Post not found:", postId);
-        return;
-      } else {
-        const result = await Services.likePost(postId);
-        if (result) {
-          selectedPost.likes = (selectedPost.likes || 0) + 1;
-        }
-        return;
-      }
+      await Services.likePost(postId);
     },
 
     async deletePost(postId) {
       console.log("METHOD: deletePost");
-
-      let result = await Services.deletePost(postId);
-      if (result) {
-        store.posts = store.posts.filter((post) => post.id !== postId);
-      }
+      await Services.deletePost(postId);
     },
 
     formatTime(time) {
@@ -96,8 +81,7 @@ export default {
     },
 
     showDeletePost() {
-      return true;
-      //return auth.getUser().id === this.postDetails.postedBy.id;
+      return auth.getUser().id === this.postDetails.postedBy.id;
     },
   },
 };

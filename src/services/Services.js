@@ -90,12 +90,26 @@ let services = {
     return response;
   },
 
+  async fetchSelectedPost() {
+    const postId = store.selectedPost;
+    if (postId != null) {
+      console.log("Request: ", postId);
+      const response = await Post.fetchPost(postId);
+      console.log("Response: ", response);
+      return response;
+    } else {
+      alert("Selected post ID is null!");
+      return null;
+    }
+  },
+
   async postComment(postId, text) {
     const newCommentRequest = new NewCommentRequest(postId, text, auth.getUser().toJSON());
     console.log("Request: ", newCommentRequest);
     const response = await Post.postComment(newCommentRequest.toJSON());
     console.log("Response: ", response);
     if (response) {
+      store.incrementCommentCount(store.selectedPost);
       return newCommentRequest;
     }
     return null;
@@ -112,6 +126,9 @@ let services = {
     console.log("Request: ", postId);
     const response = await Post.likePost(postId);
     console.log("Response: ", response);
+    if (response) {
+      store.incrementPostLikes(postId);
+    }
     return response;
   },
 
@@ -119,6 +136,9 @@ let services = {
     console.log("Request: ", postId);
     const response = await Post.deletePost(postId);
     console.log("Response: ", response);
+    if (response) {
+      store.posts = store.posts.filter((post) => post.id !== postId);
+    }
     return response;
   },
 
