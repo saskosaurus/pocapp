@@ -17,11 +17,11 @@ let Post = {
     }
   },
 
-  async fetchPosts(lastVisible = null) {
+  async fetchPosts(lastDocument = null) {
     try {
       let q = collection(db, dbConstants.POSTS);
-      if (lastVisible) {
-        q = query(q, orderBy("postData.postedAt", "desc"), startAfter(lastVisible), limit(6));
+      if (lastDocument) {
+        q = query(q, orderBy("postData.postedAt", "desc"), startAfter(lastDocument), limit(6));
       } else {
         q = query(q, orderBy("postData.postedAt", "desc"), limit(6));
       }

@@ -25,9 +25,7 @@ export default {
     return {
       auth,
       store,
-      hasMorePosts: false,
       loadingPosts: false,
-      lastDoc: null,
     };
   },
 
@@ -39,14 +37,9 @@ export default {
 
   async mounted() {
     document.addEventListener("scroll", this.handleScroll);
-    const response = await Services.fetchPosts();
-    if (response.hasMore) {
-      this.lastDoc = response.lastDoc;
-      this.hasMorePosts = true;
-    } else {
-      this.hasMorePosts = false;
-    }
+    await Services.fetchPosts();
   },
+
   beforeUnmount() {
     document.removeEventListener("scroll", this.handleScroll);
   },
@@ -59,13 +52,9 @@ export default {
 
       // Enter condition almost at the end of the page
       if (scrollY + visible >= pageHeight - 100) {
-        if (this.hasMorePosts && !this.loadingPosts) {
+        if (store.hasMorePosts && !this.loadingPosts) {
           this.loadingPosts = true;
-          const response = await Services.fetchMorePosts(this.lastDoc);
-          if (response && !response.hasMore) {
-            this.hasMorePosts = false;
-          }
-          this.lastDoc = response.lastDoc;
+          await Services.fetchMorePosts();
           this.loadingPosts = false;
         }
       }

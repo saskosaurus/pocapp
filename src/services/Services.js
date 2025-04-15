@@ -57,18 +57,34 @@ let services = {
   },
 
   async fetchPosts() {
-    const response = await Post.fetchPosts(null);
-    console.log("Fetched posts: ", response);
-    if (response != null) {
-      store.setPosts(response.posts);
+    if (store.posts.length === 0) {
+      const response = await Post.fetchPosts(null);
+      console.log("Fetched posts: ", response);
+      if (response != null) {
+        if (response.hasMore) {
+          store.hasMorePosts = true;
+          store.lastDoc = response.lastDoc;
+        } else {
+          store.hasMorePosts = false;
+        }
+        store.setPosts(response.posts);
+      }
+      return response;
+    } else {
+      console.log("Fetching posts from storage ", store.posts);
     }
-    return response;
   },
 
-  async fetchMorePosts(lastDoc) {
-    const response = await Post.fetchPosts(lastDoc);
+  async fetchMorePosts() {
+    const response = await Post.fetchPosts(store.lastDoc);
     console.log("Fetched more posts: ", response);
     if (response != null) {
+      if (response.hasMore) {
+        store.hasMorePosts = true;
+        store.lastDoc = response.lastDoc;
+      } else {
+        store.hasMorePosts = false;
+      }
       store.addPosts(response.posts);
     }
     return response;
